@@ -1,0 +1,2 @@
+class Administrator < Person
+end
