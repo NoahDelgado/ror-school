@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  value: 1
+  expected_at: 2025-03-06 14:16:42
+  examination: one
+  person: one
+
+two:
+  value: 1
+  expected_at: 2025-03-06 14:16:42
+  examination: two
+  person: two
