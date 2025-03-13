@@ -8,3 +8,267 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #f5f6fa;
+  --text-color: #2c3e50;
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --border-color: #dcdde1;
+}
+
+/* Base styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  background-color: var(--secondary-color);
+}
+
+/* Login page specific styles */
+body.login-page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.login-page main.container {
+  background: transparent;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* Navigation styles */
+.navbar {
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Main content container */
+main.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 4rem; /* Space for fixed navbar */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.notification {
+  margin-bottom: 2rem;
+}
+
+/* Make the navbar mobile responsive */
+@media screen and (max-width: 1023px) {
+  .navbar-menu {
+    background: white;
+    position: absolute;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .navbar-menu.is-active {
+    display: block;
+  }
+
+  .navbar-start {
+    padding: 0.5rem;
+  }
+
+  .navbar-end {
+    padding: 0.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+/* Active link styling */
+.navbar-item.is-active {
+  background-color: #f5f5f5;
+  color: #485fc7;
+}
+
+/* Button hover effects */
+.button {
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+/* Login form styles */
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h2 {
+  color: var(--text-color);
+  margin: 0 0 10px 0;
+  font-size: 24px;
+}
+
+.login-header p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+.login-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.form-control:invalid {
+  border-color: var(--error-color);
+}
+
+.password-input {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+}
+
+.toggle-password:focus {
+  outline: none;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remember-me input[type="checkbox"] {
+  margin: 0;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #357abd;
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.alert-danger {
+  background-color: #fdecea;
+  border: 1px solid #fdcdc9;
+  color: var(--error-color);
+}
+
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.login-footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+  color: #357abd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+  
+  .login-box {
+    padding: 20px;
+  }
+}
