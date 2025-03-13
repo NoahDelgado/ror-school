@@ -1,0 +1,8 @@
+<h1>Welcome to School Management System</h1>
+
+<% if person_signed_in? %>
+  <p>Welcome, <%= current_person.email %></p>
+  <p>You are logged in as: <%= current_person.type %></p>
+  
+  <%= button_to "Sign Out", destroy_person_session_path, method: :delete, class: "btn btn-danger" %>
+<% end %> 

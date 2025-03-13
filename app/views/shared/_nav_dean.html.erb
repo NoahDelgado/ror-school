@@ -1,0 +1,53 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <%= link_to "ROR School", root_path, class: "navbar-item" %>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasic" class="navbar-menu">
+    <div class="navbar-start">
+      <%= link_to "Dashboard", root_path, class: "navbar-item" %>
+      <%= link_to "Teachers", "#", class: "navbar-item" %>
+      <%= link_to "Students", "#", class: "navbar-item" %>
+      
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Academic
+        </a>
+        <div class="navbar-dropdown">
+          <%= link_to "Courses", courses_path, class: "navbar-item" %>
+          <%= link_to "Subjects", subjects_path, class: "navbar-item" %>
+          <%= link_to "Classes", school_classes_path, class: "navbar-item" %>
+        </div>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Administration
+        </a>
+        <div class="navbar-dropdown">
+          <%= link_to "Rooms", rooms_path, class: "navbar-item" %>
+          <%= link_to "Sections", sections_path, class: "navbar-item" %>
+          <%= link_to "Examinations", examinations_path, class: "navbar-item" %>
+          <%= link_to "Grades", grades_path, class: "navbar-item" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <span class="button is-light">
+            <%= current_person.email %>
+          </span>
+          <%= button_to "Sign Out", destroy_person_session_path, method: :delete, class: "button is-danger", form: { "data-turbo" => "false" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav> 
