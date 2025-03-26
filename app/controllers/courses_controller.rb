@@ -1,9 +1,14 @@
 class CoursesController < ApplicationController
+  before_action :authenticate_person!
   before_action :set_course, only: %i[ show edit update destroy ]
 
   # GET /courses or /courses.json
   def index
-    @courses = Course.all
+    @courses = if current_person.is_a?(Teacher)
+      current_person.courses
+    else
+      Course.all
+    end
   end
 
   # GET /courses/1 or /courses/1.json
@@ -25,7 +30,7 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       if @course.save
-        format.html { redirect_to @course, notice: "Course was successfully created." }
+        format.html { redirect_to course_url(@course), notice: "Course was successfully created." }
         format.json { render :show, status: :created, location: @course }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +43,7 @@ class CoursesController < ApplicationController
   def update
     respond_to do |format|
       if @course.update(course_params)
-        format.html { redirect_to @course, notice: "Course was successfully updated." }
+        format.html { redirect_to course_url(@course), notice: "Course was successfully updated." }
         format.json { render :show, status: :ok, location: @course }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,10 +54,10 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/1 or /courses/1.json
   def destroy
-    @course.destroy!
+    @course.soft_delete
 
     respond_to do |format|
-      format.html { redirect_to courses_path, status: :see_other, notice: "Course was successfully destroyed." }
+      format.html { redirect_to courses_path, notice: "Course was successfully archived." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +65,11 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find(params.expect(:id))
+      @course = Course.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.expect(course: [ :start_at, :end_at, :week_day, :classe_id, :subject_id, :moment_id, :person_id ])
+      params.require(:course).permit(:start_at, :end_at, :week_day, :school_class_id, :subject_id, :moment_id, :person_id)
     end
 end
