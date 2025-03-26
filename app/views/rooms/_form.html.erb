@@ -1,6 +1,6 @@
 <%= form_with(model: room) do |form| %>
   <% if room.errors.any? %>
-    <div style="color: red">
+    <div class="notification is-danger">
       <h2><%= pluralize(room.errors.count, "error") %> prohibited this room from being saved:</h2>
 
       <ul>
@@ -11,12 +11,14 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="field">
+    <%= form.label :name, class: "label" %>
+    <div class="control">
+      <%= form.text_field :name, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= form.submit class: "button is-primary" %>
   </div>
 <% end %>
