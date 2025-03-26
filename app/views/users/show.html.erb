@@ -1,0 +1,91 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">User Details</h1>
+    
+    <div class="box">
+      <div class="field is-grouped is-grouped-multiline mb-5">
+        <div class="control">
+          <%= link_to users_path, class: "button" do %>
+            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            <span>Back to Users</span>
+          <% end %>
+        </div>
+        <div class="control">
+          <%= link_to edit_user_path(@user), class: "button is-warning" do %>
+            <span class="icon"><i class="fas fa-edit"></i></span>
+            <span>Edit</span>
+          <% end %>
+        </div>
+        <div class="control">
+          <%= button_to user_path(@user), method: :delete, 
+              class: "button is-danger", 
+              data: { turbo_confirm: "Are you sure you want to archive this user?" } do %>
+            <span class="icon"><i class="fas fa-trash"></i></span>
+            <span>Archive</span>
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="columns">
+        <div class="column">
+          <div class="content">
+            <h2 class="subtitle"><%= @user.full_name %></h2>
+            
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>Type</th>
+                  <td><%= @user.type %></td>
+                </tr>
+                <tr>
+                  <th>Username</th>
+                  <td><%= @user.username %></td>
+                </tr>
+                <tr>
+                  <th>Email</th>
+                  <td><%= @user.email %></td>
+                </tr>
+                <tr>
+                  <th>First Name</th>
+                  <td><%= @user.firstname %></td>
+                </tr>
+                <tr>
+                  <th>Last Name</th>
+                  <td><%= @user.lastname %></td>
+                </tr>
+                <tr>
+                  <th>Phone Number</th>
+                  <td><%= @user.phone_number %></td>
+                </tr>
+                <tr>
+                  <th>IBAN</th>
+                  <td><%= @user.iban %></td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td><%= @user.status&.title %></td>
+                </tr>
+                <tr>
+                  <th>Address</th>
+                  <td>
+                    <% if @user.address %>
+                      <%= "#{@user.address.street} #{@user.address.number}, #{@user.address.zip} #{@user.address.town}" %>
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Created At</th>
+                  <td><%= @user.created_at.strftime("%d %B %Y, %H:%M") %></td>
+                </tr>
+                <tr>
+                  <th>Updated At</th>
+                  <td><%= @user.updated_at.strftime("%d %B %Y, %H:%M") %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 

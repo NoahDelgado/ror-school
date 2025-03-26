@@ -1,0 +1,52 @@
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title is-2 mb-0">Manage Students for <%= @school_class.name %></h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to "Back to Class", school_class_path(@school_class), class: "button is-light" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <%= form_with(url: update_students_school_class_path(@school_class), method: :post) do |form| %>
+        
+        <div class="field">
+          <label class="label">Assign Students</label>
+          <div class="control">
+            <div class="select is-multiple">
+              <%= select_tag "student_ids[]", 
+                options_from_collection_for_select(@available_students, :id, :full_name, @assigned_students.map(&:id)), 
+                multiple: true, 
+                class: "multiple-select",
+                size: 10 %>
+            </div>
+          </div>
+          <p class="help">Hold Ctrl (Windows) or Command (Mac) to select multiple students</p>
+        </div>
+
+        <div class="field">
+          <%= form.submit "Update Students", class: "button is-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="notification is-info is-light mt-4">
+      <p><strong>Currently Assigned Students:</strong></p>
+      <% if @assigned_students.any? %>
+        <div class="tags mt-2">
+          <% @assigned_students.each do |student| %>
+            <span class="tag is-info"><%= student.full_name %></span>
+          <% end %>
+        </div>
+      <% else %>
+        <p>No students currently assigned to this class.</p>
+      <% end %>
+    </div>
+  </div>
+</section> 

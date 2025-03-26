@@ -1,0 +1,181 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">User Management</h1>
+    
+    <div class="box">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <%= form_with url: users_path, method: :get, class: "form" do |f| %>
+              <div class="field has-addons">
+                <%= f.text_field :search, value: params[:search], class: "input", placeholder: "Search users..." %>
+                <div class="control">
+                  <%= f.submit "Search", class: "button is-primary" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="level-item">
+            <div class="select">
+              <%= select_tag :type, 
+                  options_for_select([
+                    ["All Types", ""], 
+                    ["Students", "Student"], 
+                    ["Teachers", "Teacher"], 
+                    ["Deans", "Dean"], 
+                    ["Administrators", "Administrator"]
+                  ], params[:type]), 
+                  onchange: "window.location.href='#{users_path}?type=' + this.value + '#{params[:search] ? "&search=#{params[:search]}" : ""}'" %>
+            </div>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <%= link_to new_user_path, class: "button is-primary" do %>
+              <span class="icon">
+                <i class="fas fa-user-plus"></i>
+              </span>
+              <span>New User</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th>
+                <%= link_to "Type", users_path(sort: "type", direction: sort_direction_for("type"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("type") %>
+              </th>
+              <th>
+                <%= link_to "First Name", users_path(sort: "firstname", direction: sort_direction_for("firstname"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("firstname") %>
+              </th>
+              <th>
+                <%= link_to "Last Name", users_path(sort: "lastname", direction: sort_direction_for("lastname"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("lastname") %>
+              </th>
+              <th>
+                <%= link_to "Email", users_path(sort: "email", direction: sort_direction_for("email"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("email") %>
+              </th>
+              <th>
+                <%= link_to "Username", users_path(sort: "username", direction: sort_direction_for("username"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("username") %>
+              </th>
+              <th>Status</th>
+              <th>
+                <%= link_to "Created", users_path(sort: "created_at", direction: sort_direction_for("created_at"), search: params[:search], type: params[:type]) %>
+                <%= sort_indicator_for("created_at") %>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td><%= user.type %></td>
+                <td><%= user.firstname %></td>
+                <td><%= user.lastname %></td>
+                <td><%= user.email %></td>
+                <td><%= user.username %></td>
+                <td><%= user.status&.title %></td>
+                <td><%= user.created_at.strftime("%d %b %Y") %></td>
+                <td>
+                  <div class="buttons are-small">
+                    <%= link_to user_path(user), class: "button is-info is-light" do %>
+                      <span class="icon"><i class="fas fa-eye"></i></span>
+                    <% end %>
+                    <%= link_to edit_user_path(user), class: "button is-warning is-light" do %>
+                      <span class="icon"><i class="fas fa-edit"></i></span>
+                    <% end %>
+                    <%= button_to user_path(user), method: :delete, 
+                        class: "button is-danger is-light", 
+                        data: { turbo_confirm: "Are you sure you want to archive this user?" },
+                        form: { style: "display: inline;" } do %>
+                      <span class="icon"><i class="fas fa-trash"></i></span>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            <% if @users.empty? %>
+              <tr>
+                <td colspan="8" class="has-text-centered">No users found</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <% if @total_pages > 1 %>
+        <div class="pagination-container mt-4">
+          <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+            <% if @page > 1 %>
+              <%= link_to users_path(page: @page - 1, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), class: "pagination-previous" do %>
+                Previous
+              <% end %>
+            <% else %>
+              <a class="pagination-previous" disabled>Previous</a>
+            <% end %>
+            
+            <% if @page < @total_pages %>
+              <%= link_to users_path(page: @page + 1, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), class: "pagination-next" do %>
+                Next
+              <% end %>
+            <% else %>
+              <a class="pagination-next" disabled>Next</a>
+            <% end %>
+            
+            <ul class="pagination-list">
+              <% if @total_pages <= 7 %>
+                <% (1..@total_pages).each do |page_num| %>
+                  <li>
+                    <%= link_to page_num.to_s, users_path(page: page_num, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), 
+                      class: "pagination-link #{@page == page_num ? 'is-current' : ''}" %>
+                  </li>
+                <% end %>
+              <% else %>
+                <% # First page %>
+                <li>
+                  <%= link_to "1", users_path(page: 1, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), 
+                    class: "pagination-link #{@page == 1 ? 'is-current' : ''}" %>
+                </li>
+                
+                <% # Ellipsis if needed %>
+                <% if @page > 3 %>
+                  <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <% end %>
+                
+                <% # Pages around current page %>
+                <% ([@page - 1, 2].max..[@page + 1, @total_pages - 1].min).each do |page_num| %>
+                  <% next if page_num == 1 || page_num == @total_pages %>
+                  <li>
+                    <%= link_to page_num.to_s, users_path(page: page_num, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), 
+                      class: "pagination-link #{@page == page_num ? 'is-current' : ''}" %>
+                  </li>
+                <% end %>
+                
+                <% # Ellipsis if needed %>
+                <% if @page < @total_pages - 2 %>
+                  <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <% end %>
+                
+                <% # Last page %>
+                <li>
+                  <%= link_to @total_pages.to_s, users_path(page: @total_pages, search: params[:search], type: params[:type], sort: params[:sort], direction: params[:direction]), 
+                    class: "pagination-link #{@page == @total_pages ? 'is-current' : ''}" %>
+                </li>
+              <% end %>
+            </ul>
+          </nav>
+          <div class="has-text-centered mt-3">
+            <p>Showing <%= (@page - 1) * @per_page + 1 %> to <%= [@page * @per_page, @total_count].min %> of <%= @total_count %> users</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section> 

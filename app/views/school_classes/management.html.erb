@@ -1,0 +1,316 @@
+<% content_for :title, "School Classes Management" %>
+
+<div class="management-dashboard">
+  <section class="section">
+    <div class="container">
+      <div class="level mb-5">
+        <div class="level-left">
+          <div class="level-item">
+            <h1 class="title is-2 mb-0">School Classes Management</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns">
+        <!-- Left sidebar with filters -->
+        <div class="column is-3">
+          <div class="box sidebar">
+            <h3 class="title is-5">Quick Actions</h3>
+            <div class="buttons">
+              <%= link_to new_school_class_path, class: "button is-success is-fullwidth mb-3" do %>
+                <span class="icon"><i class="fas fa-plus"></i></span>
+                <span>Create New Class</span>
+              <% end %>
+            </div>
+
+            <hr>
+
+            <h3 class="title is-5">Filters</h3>
+            <div class="filter-section">
+              <div class="field">
+                <label class="label">Section</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="section-filter">
+                      <option value="">All Sections</option>
+                      <% @sections.each do |section| %>
+                        <option value="<%= section.id %>"><%= section.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Academic Period</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="moment-filter">
+                      <option value="">All Periods</option>
+                      <% @moments.order(year: :desc, period_type: :asc, period_number: :asc).each do |moment| %>
+                        <option value="<%= moment.id %>"><%= moment.display_name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Teacher</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="teacher-filter">
+                      <option value="">All Teachers</option>
+                      <% @teachers.each do |teacher| %>
+                        <option value="<%= teacher.id %>"><%= teacher.full_name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Room</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="room-filter">
+                      <option value="">All Rooms</option>
+                      <% @rooms.each do |room| %>
+                        <option value="<%= room.id %>"><%= room.name %></option>
+                      <% end %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <button id="apply-filters" class="button is-info is-fullwidth">
+                  <span class="icon"><i class="fas fa-filter"></i></span>
+                  <span>Apply Filters</span>
+                </button>
+              </div>
+              <div class="field">
+                <button id="reset-filters" class="button is-light is-fullwidth">
+                  <span class="icon"><i class="fas fa-redo"></i></span>
+                  <span>Reset Filters</span>
+                </button>
+              </div>
+            </div>
+
+            <hr>
+
+            <h3 class="title is-5">Statistics</h3>
+            <div class="stats-section">
+              <div class="stat-item">
+                <p class="heading">Total Classes</p>
+                <p class="title"><%= @school_classes.count %></p>
+              </div>
+              <div class="stat-item">
+                <p class="heading">Total Students</p>
+                <p class="title"><%= Student.count %></p>
+              </div>
+              <div class="stat-item">
+                <p class="heading">Total Teachers</p>
+                <p class="title"><%= Teacher.count %></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content area with classes list -->
+        <div class="column is-9">
+          <div class="box">
+            <div class="level">
+              <div class="level-left">
+                <div class="level-item">
+                  <h3 class="title is-4 mb-0">All Classes</h3>
+                </div>
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <div class="field has-addons">
+                    <div class="control">
+                      <input id="search-classes" class="input" type="text" placeholder="Search classes...">
+                    </div>
+                    <div class="control">
+                      <button class="button is-info">
+                        <span class="icon is-small">
+                          <i class="fas fa-search"></i>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-container mt-4">
+              <table class="table is-fullwidth is-striped is-hoverable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Section</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                    <th>Period</th>
+                    <th>Students</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="classes-list">
+                  <% @school_classes.each do |school_class| %>
+                    <tr 
+                      data-section="<%= school_class.section_id %>"
+                      data-moment="<%= school_class.moment_id %>"
+                      data-teacher="<%= school_class.person_id %>"
+                      data-room="<%= school_class.room_id %>"
+                    >
+                      <td><strong><%= school_class.name %></strong> <small class="has-text-grey">(<%= school_class.uid %>)</small></td>
+                      <td><%= school_class.section.name %></td>
+                      <td><%= school_class.person.full_name %></td>
+                      <td><span class="tag is-info"><%= school_class.room.name %></span></td>
+                      <td><span class="tag is-primary"><%= school_class.moment.display_name %></span></td>
+                      <td>
+                        <div class="is-flex is-align-items-center">
+                          <span class="icon"><i class="fas fa-users"></i></span>
+                          <span class="ml-2"><%= school_class.students.count %></span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="buttons are-small">
+                          <%= link_to manage_students_school_class_path(school_class), class: "button is-success" do %>
+                            <span class="icon is-small"><i class="fas fa-user-plus"></i></span>
+                          <% end %>
+                          <%= link_to edit_school_class_path(school_class), class: "button is-info" do %>
+                            <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                          <% end %>
+                          <%= link_to school_class_path(school_class), class: "button is-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this class?" } do %>
+                            <span class="icon is-small"><i class="fas fa-trash"></i></span>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<% content_for :head do %>
+<style>
+  .management-dashboard .sidebar {
+    position: sticky;
+    top: 20px;
+  }
+  
+  .management-dashboard .stats-section {
+    margin-top: 15px;
+  }
+  
+  .management-dashboard .stat-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .management-dashboard .stat-item .heading {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .management-dashboard .stat-item .title {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+  
+  .management-dashboard .table-container {
+    max-height: 650px;
+    overflow-y: auto;
+  }
+</style>
+<% end %>
+
+<% content_for :scripts do %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const applyFilters = document.getElementById('apply-filters');
+    const resetFilters = document.getElementById('reset-filters');
+    const sectionFilter = document.getElementById('section-filter');
+    const momentFilter = document.getElementById('moment-filter');
+    const teacherFilter = document.getElementById('teacher-filter');
+    const roomFilter = document.getElementById('room-filter');
+    const searchInput = document.getElementById('search-classes');
+    const classesList = document.getElementById('classes-list');
+    
+    function filterClasses() {
+      const sectionValue = sectionFilter.value;
+      const momentValue = momentFilter.value;
+      const teacherValue = teacherFilter.value;
+      const roomValue = roomFilter.value;
+      const searchValue = searchInput.value.toLowerCase();
+      
+      const rows = classesList.querySelectorAll('tr');
+      
+      rows.forEach(row => {
+        let visible = true;
+        
+        // Filter by section
+        if (sectionValue && row.getAttribute('data-section') !== sectionValue) {
+          visible = false;
+        }
+        
+        // Filter by moment
+        if (momentValue && row.getAttribute('data-moment') !== momentValue) {
+          visible = false;
+        }
+        
+        // Filter by teacher
+        if (teacherValue && row.getAttribute('data-teacher') !== teacherValue) {
+          visible = false;
+        }
+        
+        // Filter by room
+        if (roomValue && row.getAttribute('data-room') !== roomValue) {
+          visible = false;
+        }
+        
+        // Filter by search text
+        if (searchValue) {
+          const rowText = row.textContent.toLowerCase();
+          if (!rowText.includes(searchValue)) {
+            visible = false;
+          }
+        }
+        
+        row.style.display = visible ? '' : 'none';
+      });
+    }
+    
+    // Event listeners
+    applyFilters.addEventListener('click', filterClasses);
+    searchInput.addEventListener('input', filterClasses);
+    
+    resetFilters.addEventListener('click', function() {
+      sectionFilter.value = '';
+      momentFilter.value = '';
+      teacherFilter.value = '';
+      roomFilter.value = '';
+      searchInput.value = '';
+      
+      const rows = classesList.querySelectorAll('tr');
+      rows.forEach(row => {
+        row.style.display = '';
+      });
+    });
+  });
+</script>
+<% end %> 

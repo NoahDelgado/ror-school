@@ -1,0 +1,90 @@
+<% content_for :title, "Student Dashboard" %>
+
+<div class="box">
+  <h1 class="title is-2">My Dashboard</h1>
+  
+  <div class="columns">
+    <div class="column">
+      <div class="box has-background-light">
+        <h2 class="title is-4">My Classes</h2>
+        <% if @school_classes.any? %>
+          <div class="tags">
+            <% @school_classes.each do |school_class| %>
+              <span class="tag is-medium is-info"><%= school_class.name %></span>
+            <% end %>
+          </div>
+        <% else %>
+          <p>You are not enrolled in any classes.</p>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="column">
+      <div class="box has-background-light">
+        <h2 class="title is-4">Overall Performance</h2>
+        <% if @overall_average %>
+          <div class="has-text-centered">
+            <span class="title is-1 <%= @overall_average >= 4 ? 'has-text-success' : 'has-text-danger' %>">
+              <%= @overall_average.round(1) %>
+            </span>
+            <p class="subtitle is-5">Average Grade</p>
+          </div>
+        <% else %>
+          <p>No grades available yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if @grades_by_subject.any? %>
+    <h2 class="title is-3 mt-5">My Grades by Subject</h2>
+    
+    <div class="columns is-multiline">
+      <% @grades_by_subject.each do |subject, grades| %>
+        <div class="column is-6">
+          <div class="box">
+            <div class="level">
+              <div class="level-left">
+                <h3 class="title is-4"><%= subject.name %></h3>
+              </div>
+              <div class="level-right">
+                <% if @average_by_subject[subject] %>
+                  <span class="tag is-large <%= @average_by_subject[subject] >= 4 ? 'is-success' : 'is-danger' %>">
+                    Average: <%= @average_by_subject[subject].round(1) %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+            
+            <table class="table is-fullwidth is-striped is-hoverable">
+              <thead>
+                <tr>
+                  <th>Examination</th>
+                  <th>Grade</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% grades.each do |grade| %>
+                  <tr>
+                    <td><%= grade.examination.title %></td>
+                    <td>
+                      <span class="tag <%= grade.value >= 4 ? 'is-success' : 'is-danger' %>">
+                        <%= grade.value %>
+                      </span>
+                    </td>
+                    <td><%= grade.expected_at&.strftime("%Y-%m-%d") %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="notification is-info is-light mt-5">
+      <p class="has-text-centered">You don't have any grades yet.</p>
+    </div>
+  <% end %>
+</div> 

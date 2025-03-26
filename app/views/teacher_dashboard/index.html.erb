@@ -1,0 +1,134 @@
+<% content_for :title, "Teacher Dashboard" %>
+
+<div class="box">
+  <h1 class="title is-2">Teacher Dashboard</h1>
+  
+  <div class="columns">
+    <div class="column">
+      <div class="box has-background-light">
+        <h2 class="title is-4">My Courses</h2>
+        <% if @courses.any? %>
+          <p class="subtitle is-6">You are teaching <%= @courses.count %> courses</p>
+          <div class="tags">
+            <% @courses.each do |course| %>
+              <%= link_to course_path(course), class: "tag is-medium is-info is-light" do %>
+                <%= course.subject.name %> (<%= course.school_class.name %>)
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <p>You are not teaching any courses.</p>
+          <%= link_to "Manage Courses", courses_path, class: "button is-info mt-3" %>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="column">
+      <div class="box has-background-warning-light">
+        <h2 class="title is-4">Action Items</h2>
+        <div class="content">
+          <ul>
+            <% if @grades_to_review > 0 %>
+              <li>
+                <%= link_to grades_path do %>
+                  <strong><%= @grades_to_review %></strong> grades need to be reviewed
+                <% end %>
+              </li>
+            <% end %>
+            <% if @upcoming_examinations.any? %>
+              <li>
+                <strong><%= @upcoming_examinations.count %></strong> upcoming examinations in the next 14 days
+              </li>
+            <% end %>
+          </ul>
+          <% if @grades_to_review == 0 && @upcoming_examinations.empty? %>
+            <p>You're all caught up! No pending actions.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if @upcoming_examinations.any? %>
+    <h2 class="title is-3 mt-5">Upcoming Examinations</h2>
+    <div class="box">
+      <table class="table is-fullwidth is-striped is-hoverable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Course</th>
+            <th>Class</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @upcoming_examinations.each do |exam| %>
+            <tr>
+              <td><%= exam.title %></td>
+              <td><%= exam.course.subject.name %></td>
+              <td><%= exam.course.school_class.name %></td>
+              <td>
+                <span class="tag is-info">
+                  <%= exam.expected_at&.strftime("%Y-%m-%d") %>
+                </span>
+              </td>
+              <td>
+                <%= link_to "View", examination_path(exam), class: "button is-small is-info" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @courses_statistics.any? %>
+    <h2 class="title is-3 mt-5">Course Performance</h2>
+    
+    <div class="columns is-multiline">
+      <% @courses_statistics.each do |stats| %>
+        <div class="column is-4">
+          <div class="box">
+            <h3 class="title is-4">
+              <%= stats[:course].subject.name %>
+              <span class="tag is-dark"><%= stats[:course].school_class.name %></span>
+            </h3>
+            
+            <div class="level">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Students</p>
+                  <p class="title"><%= stats[:students_count] %></p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Examinations</p>
+                  <p class="title"><%= stats[:exams_count] %></p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">Avg. Grade</p>
+                  <% if stats[:average_grade] %>
+                    <p class="title <%= stats[:average_grade] >= 4 ? 'has-text-success' : 'has-text-danger' %>">
+                      <%= stats[:average_grade] %>
+                    </p>
+                  <% else %>
+                    <p class="title">-</p>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="has-text-centered mt-4">
+              <%= link_to "View Course", course_path(stats[:course]), class: "button is-info is-outlined" %>
+              <%= link_to "Examinations", course_examinations_path(stats[:course]), class: "button is-light" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div> 

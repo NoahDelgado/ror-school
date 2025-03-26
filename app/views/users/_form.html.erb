@@ -1,0 +1,140 @@
+<%= form_with(model: @user, url: @user.new_record? ? users_path : user_path(@user), class: "box") do |form| %>
+  <% if @user.errors.any? %>
+    <div class="notification is-danger">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+        <% @user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <%= form.label :type, class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.select :type, [["Student", "Student"], ["Teacher", "Teacher"], ["Dean", "Dean"], ["Administrator", "Administrator"]] %>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :firstname, class: "label" %>
+        <div class="control">
+          <%= form.text_field :firstname, class: "input", required: true %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :lastname, class: "label" %>
+        <div class="control">
+          <%= form.text_field :lastname, class: "input", required: true %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :username, class: "label" %>
+        <div class="control">
+          <%= form.text_field :username, class: "input", required: true %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :email, class: "label" %>
+        <div class="control">
+          <%= form.email_field :email, class: "input", required: true %>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field">
+        <%= form.label :password, class: "label" %>
+        <div class="control">
+          <%= form.password_field :password, class: "input", required: @user.new_record? %>
+        </div>
+        <% unless @user.new_record? %>
+          <p class="help">Leave blank if you don't want to change it</p>
+        <% end %>
+      </div>
+
+      <div class="field">
+        <%= form.label :password_confirmation, class: "label" %>
+        <div class="control">
+          <%= form.password_field :password_confirmation, class: "input", required: @user.new_record? %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :phone_number, class: "label" %>
+        <div class="control">
+          <%= form.text_field :phone_number, class: "input", required: true %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :iban, class: "label" %>
+        <div class="control">
+          <%= form.text_field :iban, class: "input" %>
+        </div>
+      </div>
+
+      <div class="field">
+        <%= form.label :status_id, "Status", class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.collection_select :status_id, Status.all, :id, :title, {}, required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <h3 class="subtitle mt-5 mb-3">Address Information</h3>
+  
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <%= form.label :street, class: "label" %>
+        <div class="control">
+          <%= text_field_tag 'address[street]', @user.address&.street, class: "input", required: true %>
+        </div>
+      </div>
+      
+      <div class="field">
+        <%= form.label :number, class: "label" %>
+        <div class="control">
+          <%= text_field_tag 'address[number]', @user.address&.number, class: "input", required: true %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column">
+      <div class="field">
+        <%= form.label :zip, class: "label" %>
+        <div class="control">
+          <%= text_field_tag 'address[zip]', @user.address&.zip, class: "input", required: true %>
+        </div>
+      </div>
+      
+      <div class="field">
+        <%= form.label :town, class: "label" %>
+        <div class="control">
+          <%= text_field_tag 'address[town]', @user.address&.town, class: "input", required: true %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-grouped mt-5">
+    <div class="control">
+      <%= form.submit class: "button is-primary" %>
+    </div>
+    <div class="control">
+      <%= link_to "Cancel", users_path, class: "button is-light" %>
+    </div>
+  </div>
+<% end %> 

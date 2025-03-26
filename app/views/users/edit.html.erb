@@ -1,0 +1,16 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">Edit User</h1>
+    
+    <div class="field mb-5">
+      <div class="control">
+        <%= link_to user_path(@user), class: "button" do %>
+          <span class="icon"><i class="fas fa-arrow-left"></i></span>
+          <span>Back to User</span>
+        <% end %>
+      </div>
+    </div>
+    
+    <%= render "form" %>
+  </div>
+</section> 

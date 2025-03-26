@@ -1,0 +1,25 @@
+<% if current_person.is_a?(Dean) %>
+  <div class="navbar-item has-dropdown is-hoverable">
+    <a class="navbar-link">
+      <span class="icon">
+        <i class="fas fa-tasks"></i>
+      </span>
+      <span>Management</span>
+    </a>
+    <div class="navbar-dropdown">
+      <%= link_to management_school_classes_path, class: "navbar-item" do %>
+        <span class="icon">
+          <i class="fas fa-school"></i>
+        </span>
+        <span>Classes Dashboard</span>
+      <% end %>
+      <%= link_to manage_bulletins_dean_dashboard_index_path, class: "navbar-item" do %>
+        <span class="icon">
+          <i class="fas fa-certificate"></i>
+        </span>
+        <span>Grade Bulletins</span>
+      <% end %>
+      <!-- Other management links can go here -->
+    </div>
+  </div>
+<% end %> 
