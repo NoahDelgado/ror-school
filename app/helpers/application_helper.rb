@@ -25,4 +25,19 @@ module ApplicationHelper
     }
     days[day.to_i] || day.to_s
   end
+
+  # Helper methods for sorting
+  def sort_direction_for(column)
+    params[:sort] == column && params[:direction] == "asc" ? "desc" : "asc"
+  end
+
+  def sort_indicator_for(column)
+    return unless params[:sort] == column
+
+    if params[:direction] == "asc"
+      '<i class="fas fa-sort-up"></i>'.html_safe
+    else
+      '<i class="fas fa-sort-down"></i>'.html_safe
+    end
+  end
 end
