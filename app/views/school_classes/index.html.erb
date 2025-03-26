@@ -1,16 +1,121 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "School Classes" %>
 
-<% content_for :title, "School classes" %>
+<section class="section">
+  <div class="container">
+    <% if notice.present? %>
+      <div class="notification is-success is-light">
+        <%= notice %>
+      </div>
+    <% end %>
 
-<h1>School classes</h1>
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">School Classes</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <% if current_person&.is_a?(Dean) %>
+            <%= link_to new_school_class_path, class: "button is-primary" do %>
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span>New Class</span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<div id="school_classes">
-  <% @school_classes.each do |school_class| %>
-    <%= render school_class %>
-    <p>
-      <%= link_to "Show this school class", school_class %>
-    </p>
-  <% end %>
-</div>
+    <% if @school_classes.any? %>
+      <!-- Featured Classes Section -->
+      <div class="columns is-multiline mb-6" id="featured_classes">
+        <% featured_classes = if current_person.is_a?(Teacher) %>
+          <% @school_classes.select { |c| c.person_id == current_person.id }.first(3) %>
+        <% else %>
+          <% @school_classes.first(3) %>
+        <% end %>
+        
+        <% featured_classes.each do |school_class| %>
+          <div class="column is-12">
+            <%= render school_class %>
+          </div>
+        <% end %>
+      </div>
 
-<%= link_to "New school class", new_school_class_path %>
+      <!-- Classes by Year Section -->
+      <div class="content">
+        <h2 class="title is-4 mb-5">All Classes by Year</h2>
+        
+        <% @school_classes.group_by { |c| c.moment.year }.sort.reverse.each do |year, classes| %>
+          <div class="mb-6">
+            <h3 class="title is-5 has-text-primary">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+                <span>Year <%= year %></span>
+              </span>
+            </h3>
+            
+            <div class="columns is-multiline">
+              <% classes.sort_by(&:name).each do |school_class| %>
+                <div class="column is-4">
+                  <div class="card">
+                    <header class="card-header">
+                      <p class="card-header-title">
+                        <%= school_class.name %>
+                      </p>
+                    </header>
+                    <div class="card-content">
+                      <div class="content is-small">
+                        <p class="mb-2">
+                          <span class="icon-text">
+                            <span class="icon">
+                              <i class="fas fa-chalkboard-teacher"></i>
+                            </span>
+                            <span><%= school_class.person&.full_name || 'No teacher' %></span>
+                          </span>
+                        </p>
+                        <p class="mb-2">
+                          <span class="icon-text">
+                            <span class="icon">
+                              <i class="fas fa-layer-group"></i>
+                            </span>
+                            <span><%= school_class.section&.name || 'No section' %></span>
+                          </span>
+                        </p>
+                        <p class="mb-2">
+                          <span class="icon-text">
+                            <span class="icon">
+                              <i class="fas fa-users"></i>
+                            </span>
+                            <span><%= school_class.students&.count || 0 %> students</span>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <footer class="card-footer">
+                      <%= link_to "View Details", school_class, class: "card-footer-item" %>
+                    </footer>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="notification is-info is-light">
+        <p>
+          <% if current_person&.is_a?(Dean) %>
+            No classes have been created yet. Click the "New Class" button to create one.
+          <% else %>
+            No classes are available at the moment.
+          <% end %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</section>

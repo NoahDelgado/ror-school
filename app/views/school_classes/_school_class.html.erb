@@ -1,27 +1,62 @@
-<div id="<%= dom_id school_class %>">
-  <p>
-    <strong>Uid:</strong>
-    <%= school_class.uid %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= school_class.name %>
-  </p>
-
-  <p>
-    <strong>Person:</strong>
-    <%= school_class.person_id %>
-  </p>
-
-  <p>
-    <strong>Room:</strong>
-    <%= school_class.room_id %>
-  </p>
-
-  <p>
-    <strong>Moment:</strong>
-    <%= school_class.moment_id %>
-  </p>
-
+<div id="<%= dom_id school_class %>" class="card mb-4">
+  <header class="card-header">
+    <p class="card-header-title">
+      <%= school_class.name %> (<%= school_class.uid %>)
+    </p>
+    <% if current_person && current_person.id == school_class.person_id %>
+      <div class="card-header-icon">
+        <span class="tag is-info">
+          <i class="fas fa-chalkboard-teacher"></i>&nbsp;You are the teacher
+        </span>
+      </div>
+    <% end %>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <div class="columns is-multiline">
+        <div class="column is-6">
+          <p>
+            <strong><i class="fas fa-chalkboard-teacher"></i> Teacher:</strong><br>
+            <%= school_class.person&.full_name || 'Not assigned' %>
+          </p>
+        </div>
+        <div class="column is-6">
+          <p>
+            <strong><i class="fas fa-door-open"></i> Room:</strong><br>
+            <%= school_class.room&.name || 'Not assigned' %>
+          </p>
+        </div>
+        <div class="column is-6">
+          <p>
+            <strong><i class="fas fa-layer-group"></i> Section:</strong><br>
+            <%= school_class.section&.name || 'Not assigned' %>
+          </p>
+        </div>
+        <div class="column is-6">
+          <p>
+            <strong><i class="fas fa-clock"></i> Time Period:</strong><br>
+            <% if school_class.moment %>
+              <%= school_class.moment.display_name %>
+            <% else %>
+              Not assigned
+            <% end %>
+          </p>
+        </div>
+        <div class="column is-6">
+          <p>
+            <strong><i class="fas fa-users"></i> Students:</strong><br>
+            <%= school_class.students&.count || 0 %> enrolled
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="card-footer">
+    <%= link_to "View Details", school_class, class: "card-footer-item" %>
+    <% if current_person.is_a?(Dean) %>
+      <%= link_to "Manage Students", manage_students_school_class_path(school_class), class: "card-footer-item has-text-success" %>
+      <%= link_to "Edit", edit_school_class_path(school_class), class: "card-footer-item" %>
+      <%= link_to "Delete", school_class, class: "card-footer-item has-text-danger", data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <% end %>
+  </footer>
 </div>

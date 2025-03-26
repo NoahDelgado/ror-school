@@ -1,7 +1,7 @@
 <%= form_with(model: school_class) do |form| %>
   <% if school_class.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(school_class.errors.count, "error") %> prohibited this school_class from being saved:</h2>
+    <div class="notification is-danger">
+      <h2><%= pluralize(school_class.errors.count, "error") %> prohibited this school class from being saved:</h2>
 
       <ul>
         <% school_class.errors.each do |error| %>
@@ -11,32 +11,267 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :uid, style: "display: block" %>
-    <%= form.text_field :uid %>
-  </div>
+  <div class="box">
+    <div class="columns">
+      <div class="column is-6">
+        <!-- Basic Class Information -->
+        <h3 class="title is-4 mb-4">Basic Information</h3>
+        
+        <div class="field">
+          <%= form.label :name, class: "label" %>
+          <div class="control has-icons-left">
+            <%= form.text_field :name, class: "input", placeholder: "E.g. Class 10A" %>
+            <span class="icon is-small is-left">
+              <i class="fas fa-chalkboard"></i>
+            </span>
+          </div>
+          <p class="help">The name of the class as it will appear in schedules</p>
+        </div>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+        <div class="field">
+          <%= form.label :uid, "Class ID", class: "label" %>
+          <div class="control has-icons-left">
+            <%= form.text_field :uid, class: "input", placeholder: "E.g. C10A" %>
+            <span class="icon is-small is-left">
+              <i class="fas fa-fingerprint"></i>
+            </span>
+          </div>
+          <p class="help">Unique identifier for this class</p>
+        </div>
 
-  <div>
-    <%= form.label :person_id, style: "display: block" %>
-    <%= form.text_field :person_id %>
-  </div>
+        <div class="field">
+          <%= form.label :section_id, "Section", class: "label" %>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <%= form.collection_select :section_id,
+                  Section.all,
+                  :id,
+                  :name,
+                  { prompt: "Select a section" } %>
+            </div>
+            <span class="icon is-small is-left">
+              <i class="fas fa-layer-group"></i>
+            </span>
+          </div>
+        </div>
 
-  <div>
-    <%= form.label :room_id, style: "display: block" %>
-    <%= form.text_field :room_id %>
-  </div>
+        <div class="field">
+          <%= form.label :moment_id, "Academic Period", class: "label" %>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <%= form.collection_select :moment_id,
+                  Moment.all,
+                  :id,
+                  ->(m) { "#{m.display_name}" },
+                  { prompt: "Select a period" } %>
+            </div>
+            <span class="icon is-small is-left">
+              <i class="fas fa-calendar-alt"></i>
+            </span>
+          </div>
+        </div>
+      </div>
 
-  <div>
-    <%= form.label :moment_id, style: "display: block" %>
-    <%= form.text_field :moment_id %>
-  </div>
+      <div class="column is-6">
+        <!-- Class Assignment -->
+        <h3 class="title is-4 mb-4">Class Assignment</h3>
+        
+        <div class="field">
+          <%= form.label :person_id, "Primary Teacher", class: "label" %>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <%= form.collection_select :person_id,
+                  Teacher.all,
+                  :id,
+                  ->(t) { "#{t.firstname} #{t.lastname} (#{t.email})" },
+                  { prompt: "Select a teacher" } %>
+            </div>
+            <span class="icon is-small is-left">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </span>
+          </div>
+        </div>
 
-  <div>
-    <%= form.submit %>
+        <div class="field">
+          <%= form.label :room_id, "Assigned Room", class: "label" %>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <%= form.collection_select :room_id,
+                  Room.all,
+                  :id,
+                  :name,
+                  { prompt: "Select a room" } %>
+            </div>
+            <span class="icon is-small is-left">
+              <i class="fas fa-door-open"></i>
+            </span>
+          </div>
+        </div>
+        
+        <div class="field">
+          <%= form.label :student_ids, "Initial Students", class: "label" %>
+          <p class="help mb-2">Click on students to select/deselect them. Search to find specific students.</p>
+          
+          <div class="control">
+            <div class="student-select-container">
+              <div class="field has-addons mb-2">
+                <div class="control is-expanded">
+                  <input type="text" id="student-search" class="input" placeholder="Search students...">
+                </div>
+                <div class="control">
+                  <button type="button" id="clear-student-search" class="button is-light">
+                    <span class="icon">
+                      <i class="fas fa-times"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="student-select-wrapper">
+                <div class="select is-multiple">
+                  <%= form.collection_select :student_ids,
+                      Student.all.order(:lastname, :firstname),
+                      :id,
+                      ->(s) { "#{s.lastname}, #{s.firstname} (#{s.email})" },
+                      { selected: school_class.student_ids },
+                      { multiple: true, size: 10, class: "multiple-select", id: "student-select" } %>
+                </div>
+              </div>
+              
+              <div class="selected-students-container mt-3">
+                <p><strong>Selected: <span id="selected-count">0</span> students</strong></p>
+                <div id="selected-students-tags" class="tags"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field mt-5 has-text-centered">
+      <% if school_class.persisted? %>
+        <%= form.submit "Update School Class", class: "button is-primary is-medium" %>
+        <%= link_to "Cancel", school_class_path(school_class), class: "button is-light is-medium ml-2" %>
+      <% else %>
+        <%= form.submit "Create School Class", class: "button is-primary is-medium" %>
+        <%= link_to "Cancel", management_school_classes_path, class: "button is-light is-medium ml-2" %>
+      <% end %>
+    </div>
   </div>
+<% end %>
+
+<% content_for :head do %>
+<style>
+  .student-select-container {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #fafafa;
+  }
+  
+  .student-select-wrapper {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  .select.is-multiple {
+    width: 100%;
+  }
+  
+  .select.is-multiple select {
+    width: 100%;
+    height: auto;
+    border: 1px solid #dbdbdb;
+  }
+  
+  .selected-students-container {
+    min-height: 40px;
+  }
+</style>
+<% end %>
+
+<% content_for :scripts do %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const studentSelect = document.getElementById('student-select');
+    const studentSearch = document.getElementById('student-search');
+    const clearSearch = document.getElementById('clear-student-search');
+    const selectedCount = document.getElementById('selected-count');
+    const selectedTags = document.getElementById('selected-students-tags');
+    
+    // Initialize the selected count
+    updateSelectedStudents();
+    
+    // Search functionality
+    studentSearch.addEventListener('input', function() {
+      const searchValue = this.value.toLowerCase();
+      const options = studentSelect.options;
+      
+      for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+        const optionText = option.text.toLowerCase();
+        
+        if (optionText.includes(searchValue)) {
+          option.style.display = '';
+        } else {
+          option.style.display = 'none';
+        }
+      }
+    });
+    
+    // Clear search
+    clearSearch.addEventListener('click', function() {
+      studentSearch.value = '';
+      const options = studentSelect.options;
+      
+      for (let i = 0; i < options.length; i++) {
+        options[i].style.display = '';
+      }
+      
+      studentSearch.focus();
+    });
+    
+    // Fix multi-select behavior
+    studentSelect.addEventListener('mousedown', function(e) {
+      if (e.ctrlKey || e.metaKey) return; // Let browser handle Ctrl/Cmd+click
+      
+      e.preventDefault();
+      
+      const option = e.target.closest('option');
+      if (!option) return;
+      
+      // Toggle selection on the clicked option
+      option.selected = !option.selected;
+      
+      // Dispatch change event
+      this.dispatchEvent(new Event('change'));
+    });
+    
+    // Update the selected students display
+    studentSelect.addEventListener('change', updateSelectedStudents);
+    
+    function updateSelectedStudents() {
+      const selected = Array.from(studentSelect.selectedOptions);
+      selectedCount.textContent = selected.length;
+      
+      // Clear existing tags
+      selectedTags.innerHTML = '';
+      
+      // Add new tags
+      selected.forEach(option => {
+        const tag = document.createElement('span');
+        tag.className = 'tag is-info';
+        
+        // Format the student name (removing the email part)
+        const studentName = option.text.split('(')[0].trim();
+        tag.textContent = studentName;
+        
+        selectedTags.appendChild(tag);
+      });
+    }
+    
+    // Initialize
+    updateSelectedStudents();
+  });
+</script>
 <% end %>
