@@ -2,5 +2,10 @@ class HomeController < ApplicationController
   before_action :authenticate_person!
 
   def index
+    # Redirect students to their dashboard
+    if current_person.is_a?(Student)
+      redirect_to student_dashboard_path
+    end
+    # Keep the default page for other roles (Dean, Teacher)
   end
-end 
+end
