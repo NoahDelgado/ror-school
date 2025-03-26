@@ -1,6 +1,6 @@
 <%= form_with(model: course) do |form| %>
   <% if course.errors.any? %>
-    <div style="color: red">
+    <div class="notification is-danger">
       <h2><%= pluralize(course.errors.count, "error") %> prohibited this course from being saved:</h2>
 
       <ul>
@@ -11,42 +11,112 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :start_at, style: "display: block" %>
-    <%= form.datetime_field :start_at %>
-  </div>
-
-  <div>
-    <%= form.label :end_at, style: "display: block" %>
-    <%= form.datetime_field :end_at %>
-  </div>
-
-  <div>
-    <%= form.label :week_day, style: "display: block" %>
-    <%= form.number_field :week_day %>
-  </div>
-
-  <div>
-    <%= form.label :classe_id, style: "display: block" %>
-    <%= form.text_field :classe_id %>
-  </div>
-
-  <div>
-    <%= form.label :subject_id, style: "display: block" %>
-    <%= form.text_field :subject_id %>
-  </div>
-
-  <div>
-    <%= form.label :moment_id, style: "display: block" %>
-    <%= form.text_field :moment_id %>
-  </div>
-
-  <div>
-    <%= form.label :person_id, style: "display: block" %>
-    <%= form.text_field :person_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="columns is-multiline">
+    <div class="column is-4">
+      <div class="field">
+        <%= form.label :subject_id, "Subject", class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.collection_select :subject_id,
+                Subject.all,
+                :id,
+                :name,
+                { prompt: "Select a subject" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column is-4">
+      <div class="field">
+        <%= form.label :moment_id, "Time Slot", class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.collection_select :moment_id,
+                Moment.all,
+                :id,
+                ->(m) { "#{m.uid} (#{m.start_at&.strftime('%H:%M')} - #{m.end_at&.strftime('%H:%M')})" },
+                { prompt: "Select a time slot" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column is-4">
+      <div class="field">
+        <%= form.label :school_class_id, "Class", class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.collection_select :school_class_id,
+                SchoolClass.all,
+                :id,
+                ->(sc) { "#{sc.name} (#{sc.uid})" },
+                { prompt: "Select a class" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column is-4">
+      <div class="field">
+        <%= form.label :person_id, "Teacher", class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.collection_select :person_id,
+                Teacher.all,
+                :id,
+                ->(t) { "#{t.firstname} #{t.lastname} (#{t.email})" },
+                { prompt: "Select a teacher" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column is-3">
+      <div class="field">
+        <%= form.label :week_day, class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= form.select :week_day,
+                [
+                  ["Monday", 1],
+                  ["Tuesday", 2],
+                  ["Wednesday", 3],
+                  ["Thursday", 4],
+                  ["Friday", 5]
+                ],
+                { prompt: "Select a day" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="column is-2">
+      <div class="field">
+        <%= form.label :start_at, class: "label" %>
+        <div class="control">
+          <%= form.time_field :start_at, value: course.start_at.is_a?(Time) ? course.start_at.strftime("%H:%M") : course.start_at, class: "input" %>
+        </div>
+        <p class="help">Enter time in HH:MM format</p>
+      </div>
+    </div>
+    
+    <div class="column is-2">
+      <div class="field">
+        <%= form.label :end_at, class: "label" %>
+        <div class="control">
+          <%= form.time_field :end_at, value: course.end_at.is_a?(Time) ? course.end_at.strftime("%H:%M") : course.end_at, class: "input" %>
+        </div>
+        <p class="help">Enter time in HH:MM format</p>
+      </div>
+    </div>
+    
+    <div class="column is-12">
+      <div class="field">
+        <div class="control">
+          <%= form.submit class: "button is-primary" %>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

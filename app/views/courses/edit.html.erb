@@ -1,12 +1,36 @@
-<% content_for :title, "Editing course" %>
+<% content_for :title, "Edit Course" %>
 
-<h1>Editing course</h1>
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Edit Course</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons">
+            <%= link_to course_path(@course), class: "button is-light mr-2" do %>
+              <span class="icon">
+                <i class="fas fa-eye"></i>
+              </span>
+              <span>View Course</span>
+            <% end %>
+            
+            <%= link_to courses_path, class: "button is-light" do %>
+              <span class="icon">
+                <i class="fas fa-arrow-left"></i>
+              </span>
+              <span>Back to Courses</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<%= render "form", course: @course %>
-
-<br>
-
-<div>
-  <%= link_to "Show this course", @course %> |
-  <%= link_to "Back to courses", courses_path %>
-</div>
+    <div class="box">
+      <%= render "form", course: @course %>
+    </div>
+  </div>
+</section>

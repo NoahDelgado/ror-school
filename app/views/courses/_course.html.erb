@@ -1,37 +1,49 @@
-<div id="<%= dom_id course %>">
-  <p>
-    <strong>Start at:</strong>
-    <%= course.start_at %>
-  </p>
+<div id="<%= dom_id course %>" class="box">
+  <div class="columns is-multiline">
+    <div class="column is-6">
+      <div class="field">
+        <label class="label">Subject:</label>
+        <p><%= course.subject&.name || "N/A" %></p>
+      </div>
+    </div>
+    
+    <div class="column is-6">
+      <div class="field">
+        <label class="label">Class:</label>
+        <p><%= course.school_class&.name || "N/A" %></p>
+      </div>
+    </div>
+    
+    <div class="column is-6">
+      <div class="field">
+        <label class="label">Teacher:</label>
+        <p><%= course.person&.full_name || "N/A" %></p>
+      </div>
+    </div>
 
-  <p>
-    <strong>End at:</strong>
-    <%= course.end_at %>
-  </p>
-
-  <p>
-    <strong>Week day:</strong>
-    <%= course.week_day %>
-  </p>
-
-  <p>
-    <strong>Classe:</strong>
-    <%= course.classe_id %>
-  </p>
-
-  <p>
-    <strong>Subject:</strong>
-    <%= course.subject_id %>
-  </p>
-
-  <p>
-    <strong>Moment:</strong>
-    <%= course.moment_id %>
-  </p>
-
-  <p>
-    <strong>Person:</strong>
-    <%= course.person_id %>
-  </p>
-
+    <div class="column is-6">
+      <div class="field">
+        <label class="label">Moment/Period:</label>
+        <p><%= course.moment&.display_name || "N/A" %></p>
+      </div>
+    </div>
+    
+    <div class="column is-12">
+      <div class="field">
+        <label class="label">Schedule:</label>
+        <p class="icon-text">
+          <span class="icon">
+            <i class="fas fa-calendar-day"></i>
+          </span>
+          <span>
+            <%= [
+              ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][course.week_day],
+              course.start_at&.strftime("%H:%M"),
+              course.end_at&.strftime("%H:%M")
+            ].compact.join(" | ") %>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

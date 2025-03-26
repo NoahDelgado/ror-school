@@ -1,10 +1,41 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Course Details" %>
 
-<%= render @course %>
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Course Details</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to courses_path, class: "button is-light mr-2" do %>
+            <span class="icon">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+            <span>Back to Courses</span>
+          <% end %>
+          
+          <%= link_to edit_course_path(@course), class: "button is-link" do %>
+            <span class="icon">
+              <i class="fas fa-edit"></i>
+            </span>
+            <span>Edit</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Edit this course", edit_course_path(@course) %> |
-  <%= link_to "Back to courses", courses_path %>
-
-  <%= button_to "Destroy this course", @course, method: :delete %>
-</div>
+    <%= render @course %>
+    
+    <div class="mt-5">
+      <%= button_to course_path(@course), method: :delete, class: "button is-danger", data: { confirm: "Are you sure you want to delete this course?" } do %>
+        <span class="icon">
+          <i class="fas fa-trash"></i>
+        </span>
+        <span>Delete Course</span>
+      <% end %>
+    </div>
+  </div>
+</section>
