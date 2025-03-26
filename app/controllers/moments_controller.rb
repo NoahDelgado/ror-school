@@ -1,4 +1,5 @@
 class MomentsController < ApplicationController
+  before_action :authenticate_person!
   before_action :set_moment, only: %i[ show edit update destroy ]
 
   # GET /moments or /moments.json
@@ -25,7 +26,7 @@ class MomentsController < ApplicationController
 
     respond_to do |format|
       if @moment.save
-        format.html { redirect_to @moment, notice: "Moment was successfully created." }
+        format.html { redirect_to moment_url(@moment), notice: "Moment was successfully created." }
         format.json { render :show, status: :created, location: @moment }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +39,7 @@ class MomentsController < ApplicationController
   def update
     respond_to do |format|
       if @moment.update(moment_params)
-        format.html { redirect_to @moment, notice: "Moment was successfully updated." }
+        format.html { redirect_to moment_url(@moment), notice: "Moment was successfully updated." }
         format.json { render :show, status: :ok, location: @moment }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,10 +50,10 @@ class MomentsController < ApplicationController
 
   # DELETE /moments/1 or /moments/1.json
   def destroy
-    @moment.destroy!
+    @moment.soft_delete
 
     respond_to do |format|
-      format.html { redirect_to moments_path, status: :see_other, notice: "Moment was successfully destroyed." }
+      format.html { redirect_to moments_path, notice: "Moment was successfully archived." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +61,11 @@ class MomentsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_moment
-      @moment = Moment.find(params.expect(:id))
+      @moment = Moment.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def moment_params
-      params.expect(moment: [ :uid, :category, :start_at, :end_at ])
+      params.require(:moment).permit(:uid, :period_type, :year, :period_number, :start_at, :end_at)
     end
 end

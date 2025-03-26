@@ -1,22 +1,33 @@
-<div id="<%= dom_id moment %>">
-  <p>
-    <strong>Uid:</strong>
-    <%= moment.uid %>
-  </p>
+<div id="<%= dom_id moment %>" class="box">
+  <div class="content">
+    <p>
+      <strong>UID:</strong>
+      <%= moment.uid %>
+    </p>
 
-  <p>
-    <strong>Category:</strong>
-    <%= moment.category %>
-  </p>
+    <p>
+      <strong>Period Type:</strong>
+      <%= moment.period_type %>
+    </p>
 
-  <p>
-    <strong>Start at:</strong>
-    <%= moment.start_at %>
-  </p>
+    <p>
+      <strong>Year:</strong>
+      <%= moment.year %>
+    </p>
 
-  <p>
-    <strong>End at:</strong>
-    <%= moment.end_at %>
-  </p>
+    <p>
+      <strong>Period Number:</strong>
+      <%= moment.period_number %>
+    </p>
 
+    <p>
+      <strong>Start at:</strong>
+      <%= moment.start_at&.strftime("%Y-%m-%d %H:%M") %>
+    </p>
+
+    <p>
+      <strong>End at:</strong>
+      <%= moment.end_at&.strftime("%Y-%m-%d %H:%M") %>
+    </p>
+  </div>
 </div>

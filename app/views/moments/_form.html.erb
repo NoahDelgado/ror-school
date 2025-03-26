@@ -1,6 +1,6 @@
 <%= form_with(model: moment) do |form| %>
   <% if moment.errors.any? %>
-    <div style="color: red">
+    <div class="notification is-danger">
       <h2><%= pluralize(moment.errors.count, "error") %> prohibited this moment from being saved:</h2>
 
       <ul>
@@ -11,27 +11,52 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :uid, style: "display: block" %>
-    <%= form.text_field :uid %>
+  <div class="field">
+    <%= form.label :uid, class: "label" %>
+    <div class="control">
+      <%= form.text_field :uid, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :category, style: "display: block" %>
-    <%= form.number_field :category %>
+  <div class="field">
+    <%= form.label :period_type, class: "label" %>
+    <div class="control">
+      <%= form.select :period_type,
+          ["QUARTER", "SEMESTER", "YEAR"],
+          { prompt: "Select a period type" },
+          { class: "select" } %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :start_at, style: "display: block" %>
-    <%= form.datetime_field :start_at %>
+  <div class="field">
+    <%= form.label :period_number, class: "label" %>
+    <div class="control">
+      <%= form.number_field :period_number, class: "input", min: 1, max: 4 %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :end_at, style: "display: block" %>
-    <%= form.datetime_field :end_at %>
+  <div class="field">
+    <%= form.label :year, class: "label" %>
+    <div class="control">
+      <%= form.number_field :year, class: "input", value: Time.current.year %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= form.label :start_at, class: "label" %>
+    <div class="control">
+      <%= form.datetime_field :start_at, class: "input" %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_at, class: "label" %>
+    <div class="control">
+      <%= form.datetime_field :end_at, class: "input" %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.submit class: "button is-primary" %>
   </div>
 <% end %>
