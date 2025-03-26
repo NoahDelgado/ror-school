@@ -1,6 +1,6 @@
 <%= form_with(model: examination) do |form| %>
   <% if examination.errors.any? %>
-    <div style="color: red">
+    <div class="notification is-danger">
       <h2><%= pluralize(examination.errors.count, "error") %> prohibited this examination from being saved:</h2>
 
       <ul>
@@ -11,22 +11,33 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="field">
+    <%= form.label :title, class: "label" %>
+    <div class="control">
+      <%= form.text_field :title, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :expected_at, style: "display: block" %>
-    <%= form.datetime_field :expected_at %>
+  <div class="field">
+    <%= form.label :expected_at, class: "label" %>
+    <div class="control">
+      <%= form.datetime_field :expected_at, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :course_id, style: "display: block" %>
-    <%= form.text_field :course_id %>
+  <div class="field">
+    <%= form.label :course_id, "Course", class: "label" %>
+    <div class="control">
+      <%= form.collection_select :course_id,
+          current_person.is_a?(Teacher) ? Course.where(person_id: current_person.id) : Course.all,
+          :id,
+          ->(c) { "#{c.subject.name} - #{c.school_class.name} (#{c.week_day})" },
+          { prompt: "Select a course" },
+          { class: "select" } %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= form.submit class: "button is-primary" %>
   </div>
 <% end %>

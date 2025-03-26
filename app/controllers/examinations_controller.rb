@@ -1,7 +1,7 @@
 class ExaminationsController < ApplicationController
   before_action :authenticate_person!
-  before_action :set_examination, only: %i[ show edit update destroy ]
-  before_action :ensure_can_modify!, only: %i[ edit update destroy ]
+  before_action :set_examination, only: %i[ show edit update destroy update_grades ]
+  before_action :ensure_can_modify!, only: %i[ edit update destroy update_grades ]
 
   # GET /examinations or /examinations.json
   def index
@@ -14,6 +14,15 @@ class ExaminationsController < ApplicationController
 
   # GET /examinations/1 or /examinations/1.json
   def show
+    if current_person.is_a?(Teacher)
+      @students = @examination.course.school_class.students
+      @grades = @examination.grades.index_by(&:person_id)
+
+      # Prepare student grades form with default values
+      @student_grades = @students.map do |student|
+        @grades[student.id] || @examination.grades.build(person: student, expected_at: @examination.expected_at)
+      end
+    end
   end
 
   # GET /examinations/new
@@ -53,6 +62,23 @@ class ExaminationsController < ApplicationController
     end
   end
 
+  # PATCH /examinations/1/update_grades
+  def update_grades
+    @students = @examination.course.school_class.students
+    @grades = @examination.grades.index_by(&:person_id)
+
+    # Prepare student grades form with default values
+    @student_grades = @students.map do |student|
+      @grades[student.id] || @examination.grades.build(person: student, expected_at: @examination.expected_at)
+    end
+
+    if @examination.update(examination_params)
+      redirect_to @examination, notice: "Grades were successfully updated."
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /examinations/1 or /examinations/1.json
   def destroy
     @examination.soft_delete
@@ -71,7 +97,12 @@ class ExaminationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def examination_params
-      params.require(:examination).permit(:title, :expected_at, :course_id)
+      params.require(:examination).permit(
+        :title,
+        :expected_at,
+        :course_id,
+        grades_attributes: [ :id, :value, :expected_at, :person_id ]
+      )
     end
 
     def ensure_can_modify!

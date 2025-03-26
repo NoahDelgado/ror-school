@@ -1,16 +1,45 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Examinations" %>
 
-<h1>Examinations</h1>
+<section class="section">
+  <div class="container">
+    <% if notice.present? %>
+      <div class="notification is-success is-light">
+        <%= notice %>
+      </div>
+    <% end %>
 
-<div id="examinations">
-  <% @examinations.each do |examination| %>
-    <%= render examination %>
-    <p>
-      <%= link_to "Show this examination", examination %>
-    </p>
-  <% end %>
-</div>
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title is-2">Examinations</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to new_examination_path, class: "button is-primary" do %>
+            <span class="icon">
+              <i class="fas fa-plus"></i>
+            </span>
+            <span>New Examination</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<%= link_to "New examination", new_examination_path %>
+    <div class="columns is-multiline" id="examinations">
+      <% if @examinations.any? %>
+        <% @examinations.each do |examination| %>
+          <div class="column is-4">
+            <%= render examination %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="column is-12">
+          <div class="notification is-info is-light">
+            <p>No examinations have been created yet.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
