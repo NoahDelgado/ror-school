@@ -2,6 +2,7 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
+// Handle hamburger menu toggling
 document.addEventListener('turbo:load', () => {
     // Get all "navbar-burger" elements
     const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);

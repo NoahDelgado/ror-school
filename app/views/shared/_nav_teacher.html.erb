@@ -11,7 +11,8 @@
 
   <div id="navbarBasic" class="navbar-menu">
     <div class="navbar-start">
-      <%= link_to "Dashboard", root_path, class: "navbar-item" %>
+      <%= link_to "Dashboard", teacher_dashboard_path, class: "navbar-item" %>
+      <%= link_to "My Schedule", schedules_path, class: "navbar-item" %>
       
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
@@ -19,7 +20,6 @@
         </a>
         <div class="navbar-dropdown">
           <%= link_to "My Classes", school_classes_path, class: "navbar-item" %>
-          <%= link_to "My Students", "#", class: "navbar-item" %>
           <%= link_to "Examinations", examinations_path, class: "navbar-item" %>
           <%= link_to "Grades", grades_path, class: "navbar-item" %>
         </div>

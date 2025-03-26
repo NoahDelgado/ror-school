@@ -279,7 +279,7 @@ main.container {
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  background-color: #0a1929;
+  background-color: white;
   margin-bottom: 20px;
 }
 
@@ -288,7 +288,7 @@ main.container {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #1e293b;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 8px 8px 0 0;
 }
@@ -306,9 +306,9 @@ main.container {
 
 .schedule-info {
   padding: 10px 20px;
-  background-color: #0f2942;
-  border-bottom: 1px solid #1e293b;
-  color: white;
+  background-color: var(--secondary-color);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 .schedule-info .tags {
@@ -327,16 +327,16 @@ main.container {
 .dropdown-divider {
   width: 100%;
   height: 1px;
-  background-color: #1e293b;
+  background-color: var(--border-color);
   margin: 10px 0;
 }
 
 .timetable-container {
   overflow-x: auto;
   padding: 0;
-  background-color: #0a1929;
+  background-color: white;
   border-radius: 0 0 8px 8px;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .timetable {
@@ -347,7 +347,7 @@ main.container {
 }
 
 .timetable th, .timetable td {
-  border: 1px solid #1e293b;
+  border: 1px solid var(--border-color);
   padding: 0;
   vertical-align: top;
 }
@@ -357,16 +357,16 @@ main.container {
   left: 0;
   z-index: 3;
   width: 80px;
-  background-color: #0f2942;
+  background-color: var(--secondary-color);
   text-align: center;
   font-weight: bold;
   padding: 10px 5px !important;
-  color: white;
+  color: var(--text-color);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .day-column {
-  background-color: #1e293b;
+  background-color: var(--primary-color);
   color: white;
   text-align: center;
   padding: 10px !important;
@@ -377,24 +377,24 @@ main.container {
   position: sticky;
   left: 0;
   z-index: 2;
-  background-color: #0f2942;
+  background-color: var(--secondary-color);
   text-align: center;
   height: 60px;
   font-size: 0.9rem;
   padding: 5px !important;
-  color: white;
+  color: var(--text-color);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .day-cell {
   height: 60px;
   position: relative;
-  background-color: #0a1929;
+  background-color: white;
   padding: 0 !important;
 }
 
 .hour-row:nth-child(odd) .day-cell {
-  background-color: #081421;
+  background-color: var(--secondary-color);
 }
 
 /* Update course block styling for better layout */
@@ -567,11 +567,11 @@ main.container {
 }
 
 .timetable-container::-webkit-scrollbar-track {
-  background: #0f2942;
+  background: var(--secondary-color);
 }
 
 .timetable-container::-webkit-scrollbar-thumb {
-  background-color: #1e293b;
+  background-color: var(--primary-color);
   border-radius: 20px;
 }
 
@@ -581,7 +581,7 @@ main.container {
   left: 0;
   right: 0;
   height: 2px;
-  background-color: red;
+  background-color: var(--error-color);
   z-index: 5;
 }
 
@@ -592,9 +592,39 @@ body.schedule-page .notification {
 
 /* Chemistry subject styling - similar to reference image */
 .course-block[data-subject="Chemistry"] {
-  background-color: #b83b8f !important; /* Purple color for Chemistry */
+  background-color: var(--primary-color) !important;
 }
 
 .course-block[data-subject="Chemistry"] .course-name {
   font-size: 1.05rem;
+}
+
+/* Multiple select styling */
+.select.is-multiple {
+  width: 100%;
+}
+
+.select.is-multiple select.multiple-select {
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+  border-radius: 4px;
+  padding: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.select.is-multiple select.multiple-select option {
+  padding: 0.5rem;
+  margin-bottom: 2px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.select.is-multiple select.multiple-select option:checked {
+  background-color: #3298dc;
+  color: white;
+}
+
+.select.is-multiple select.multiple-select option:hover {
+  background-color: #f5f5f5;
 }
