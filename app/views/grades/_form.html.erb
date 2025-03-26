@@ -11,27 +11,50 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :value, style: "display: block" %>
-    <%= form.number_field :value %>
+  <div class="field">
+    <%= form.label :value, class: "label" %>
+    <div class="control">
+      <%= form.number_field :value, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :expected_at, style: "display: block" %>
-    <%= form.datetime_field :expected_at %>
+  <div class="field">
+    <%= form.label :expected_at, class: "label" %>
+    <div class="control">
+      <%= form.datetime_field :expected_at, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :examination_id, style: "display: block" %>
-    <%= form.text_field :examination_id %>
+  <div class="field">
+    <%= form.label :examination_id, "Examination", class: "label" %>
+    <div class="control">
+      <%= form.collection_select :examination_id, 
+          current_person.is_a?(Teacher) ? Examination.joins(:course).where(courses: { person_id: current_person.id }) : Examination.all,
+          :id, 
+          ->(e) { "#{e.course.subject.name} - #{e.title}" },
+          { prompt: "Select an examination" },
+          { class: "select" } %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :person_id, style: "display: block" %>
-    <%= form.text_field :person_id %>
+  <div class="field">
+    <%= form.label :person_id, "Student", class: "label" %>
+    <div class="control">
+      <% if params[:student_id].present? %>
+        <%= form.hidden_field :person_id, value: params[:student_id] %>
+        <p class="help"><%= Student.find(params[:student_id]).email %></p>
+      <% else %>
+        <%= form.collection_select :person_id,
+            Student.all,
+            :id,
+            :email,
+            { prompt: "Select a student" },
+            { class: "select" } %>
+      <% end %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= form.submit class: "button is-primary" %>
   </div>
 <% end %>
