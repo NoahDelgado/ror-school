@@ -11,18 +11,20 @@
 
   <div id="navbarBasic" class="navbar-menu">
     <div class="navbar-start">
-      <%= link_to "Dashboard", root_path, class: "navbar-item" %>
-      <%= link_to "Teachers", "#", class: "navbar-item" %>
-      <%= link_to "Students", "#", class: "navbar-item" %>
+      <%= link_to "Dashboard", dean_dashboard_index_path, class: "navbar-item" %>
+      <%= link_to "Schedule", schedules_path, class: "navbar-item" %>
+      <%= link_to "Users", users_path, class: "navbar-item" %>
       
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          Academic
+          Course Management
         </a>
         <div class="navbar-dropdown">
-          <%= link_to "Courses", courses_path, class: "navbar-item" %>
+          <%= link_to "Manage Courses", manage_courses_dean_dashboard_index_path, class: "navbar-item" %>
+          <%= link_to "All Courses", courses_path, class: "navbar-item" %>
           <%= link_to "Subjects", subjects_path, class: "navbar-item" %>
-          <%= link_to "Classes", school_classes_path, class: "navbar-item" %>
+          <%= link_to "Classes Management", management_school_classes_path, class: "navbar-item" %>
+          <%= link_to "Grade Bulletins", manage_bulletins_dean_dashboard_index_path, class: "navbar-item" %>
         </div>
       </div>
 

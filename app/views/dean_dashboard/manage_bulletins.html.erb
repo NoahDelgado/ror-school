@@ -1,0 +1,122 @@
+<% content_for :title, "Manage Grade Bulletins" %>
+
+<section class="section">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Manage Grade Bulletins</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to dean_dashboard_index_path, class: "button" do %>
+            <span class="icon">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+            <span>Back to Dashboard</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search and Filter Box -->
+    <div class="box mb-5">
+      <h2 class="title is-4">Find Student</h2>
+      
+      <%= form_tag manage_bulletins_dean_dashboard_index_path, method: :get, class: "form" do %>
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Search by Name</label>
+              <div class="control has-icons-left">
+                <%= text_field_tag :search, params[:search], class: "input", placeholder: "Student name" %>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-search"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="column">
+            <div class="field">
+              <label class="label">Filter by Class</label>
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <%= select_tag :school_class_id, 
+                    options_from_collection_for_select(@school_classes, :id, :name, params[:school_class_id]), 
+                    prompt: "All Classes" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="column is-2 is-flex is-align-items-flex-end">
+            <div class="field">
+              <div class="control">
+                <%= submit_tag "Search", class: "button is-primary is-fullwidth" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Students Table -->
+    <div class="box">
+      <h2 class="title is-4">Students</h2>
+      
+      <% if @students.any? %>
+        <div class="table-container">
+          <table class="table is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @students.each do |student| %>
+                <tr>
+                  <td><%= student.full_name %></td>
+                  <td><%= student.school_classes.map(&:name).join(", ") %></td>
+                  <td>
+                    <%= form_tag student_bulletin_dean_dashboard_index_path, method: :get, class: "field has-addons" do %>
+                      <%= hidden_field_tag :student_id, student.id %>
+                      <div class="control">
+                        <div class="select is-small">
+                          <%= select_tag :moment_id, 
+                            options_from_collection_for_select(@moments, :id, :display_name),
+                            prompt: "Select Period", 
+                            required: true %>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <%= submit_tag "Generate Bulletin", class: "button is-small is-info" %>
+                      </div>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        
+        <% if defined?(Kaminari) %>
+          <div class="pagination-wrapper">
+            <%= paginate @students %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="notification is-warning">
+          <p>No students found. Try different search criteria.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<script>
+  // No custom JavaScript needed - using HTML5 required attribute
+</script> 

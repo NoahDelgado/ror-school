@@ -9,21 +9,46 @@ Rails.application.routes.draw do
   }
 
   # Resources
+  resources :users
   resources :sections
   resources :statuses
   resources :grades
-  resources :examinations
+  resources :examinations do
+    member do
+      patch :update_grades
+    end
+  end
   resources :courses do
     resources :examinations
   end
   resources :subjects
-  resources :school_classes
+  resources :school_classes do
+    collection do
+      get :management
+    end
+    member do
+      get :manage_students
+      post :update_students
+    end
+  end
   resources :moments
   resources :rooms
   resources :addresses
 
   # Student dashboard
   get "student_dashboard", to: "student_dashboard#index"
+
+  # Teacher dashboard
+  get "teacher_dashboard", to: "teacher_dashboard#index"
+
+  # Dean dashboard
+  resources :dean_dashboard, only: [ :index ] do
+    collection do
+      get :manage_courses
+      get :manage_bulletins
+      get :student_bulletin
+    end
+  end
 
   # Schedules
   resources :schedules, only: [ :index ]

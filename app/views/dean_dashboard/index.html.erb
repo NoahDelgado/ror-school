@@ -1,0 +1,148 @@
+<% content_for :title, "Dean Dashboard" %>
+
+<section class="section">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Dean Dashboard</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to manage_courses_dean_dashboard_index_path, class: "button is-primary" do %>
+            <span class="icon">
+              <i class="fas fa-book"></i>
+            </span>
+            <span>Manage Courses</span>
+          <% end %>
+        </div>
+        <div class="level-item">
+          <%= link_to manage_bulletins_dean_dashboard_index_path, class: "button is-info" do %>
+            <span class="icon">
+              <i class="fas fa-certificate"></i>
+            </span>
+            <span>Manage Grade Bulletins</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Box -->
+    <div class="box mb-5">
+      <div class="columns">
+        <div class="column">
+          <div class="has-text-centered">
+            <p class="heading">Total Courses</p>
+            <p class="title"><%= @courses.count %></p>
+          </div>
+        </div>
+        <div class="column">
+          <div class="has-text-centered">
+            <p class="heading">Total Teachers</p>
+            <p class="title"><%= @teachers.count %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns">
+      <!-- Recent Courses -->
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-book"></i>
+                </span>
+                <span>Recent Courses</span>
+              </span>
+            </p>
+          </header>
+          <div class="card-content">
+            <% if @courses.exists? %>
+              <div class="table-container">
+                <table class="table is-fullwidth is-hoverable">
+                  <thead>
+                    <tr>
+                      <th>Subject</th>
+                      <th>Moment</th>
+                      <th>Teacher</th>
+                      <th>Class</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @courses.order(created_at: :desc).limit(5).each do |course| %>
+                      <tr>
+                        <td><%= course.subject.name %></td>
+                        <td><%= course.moment.display_name %></td>
+                        <td><%= course.person.full_name %></td>
+                        <td><%= course.school_class.name %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div class="notification is-light">
+                <p>No courses available.</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Teachers -->
+      <div class="column is-half">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-chalkboard-teacher"></i>
+                </span>
+                <span>Teachers</span>
+              </span>
+            </p>
+          </header>
+          <div class="card-content">
+            <% if @teachers.exists? %>
+              <div class="table-container">
+                <table class="table is-fullwidth is-hoverable">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Courses</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @teachers.limit(5).each do |teacher| %>
+                      <tr>
+                        <td><%= teacher.full_name %></td>
+                        <td><%= Course.where(person_id: teacher.id).count %></td>
+                        <td>
+                          <%= link_to manage_courses_dean_dashboard_index_path(teacher_id: teacher.id), class: "button is-small is-link" do %>
+                            <span class="icon">
+                              <i class="fas fa-plus"></i>
+                            </span>
+                            <span>Assign Course</span>
+                          <% end %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div class="notification is-light">
+                <p>No teachers available.</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 
