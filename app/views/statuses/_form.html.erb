@@ -1,6 +1,6 @@
 <%= form_with(model: status) do |form| %>
   <% if status.errors.any? %>
-    <div style="color: red">
+    <div class="notification is-danger">
       <h2><%= pluralize(status.errors.count, "error") %> prohibited this status from being saved:</h2>
 
       <ul>
@@ -11,17 +11,21 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :slug, style: "display: block" %>
-    <%= form.text_field :slug %>
+  <div class="field">
+    <%= form.label :slug, class: "label" %>
+    <div class="control">
+      <%= form.text_field :slug, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="field">
+    <%= form.label :title, class: "label" %>
+    <div class="control">
+      <%= form.text_field :title, class: "input" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= form.submit class: "button is-primary" %>
   </div>
 <% end %>
