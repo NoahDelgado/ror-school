@@ -110,6 +110,13 @@ teacher_address = Address.create!(
   number: '456'
 )
 
+dean_address = Address.create!(
+  zip: '45678',
+  town: 'Dean Town',
+  street: 'Dean Avenue',
+  number: '101'
+)
+
 student_address = Address.create!(
   zip: '34567',
   town: 'Student Town',
@@ -145,6 +152,21 @@ teachers = [
     status: statuses[:active]
   )
 ]
+
+# Create dean
+puts "Creating dean..."
+dean = Person.create!(
+  email: 'dean@school.com',
+  password: 'password123',
+  username: 'school_dean',
+  firstname: 'Academic',
+  lastname: 'Dean',
+  phone_number: '123-456-7890',
+  iban: 'CH93 0076 2011 6238 4295 7',
+  type: 'Dean',
+  address: dean_address,
+  status: statuses[:active]
+)
 
 # Create students
 puts "Creating students..."
@@ -278,6 +300,8 @@ end
 
 puts "Seeds completed successfully!"
 puts "\nLogin credentials:"
+puts "Dean:"
+puts "- dean@school.com / password123"
 puts "Teachers:"
 puts "- math.teacher@school.com / password123"
 puts "- physics.teacher@school.com / password123"
