@@ -1,9 +1,15 @@
 class ExaminationsController < ApplicationController
+  before_action :authenticate_person!
   before_action :set_examination, only: %i[ show edit update destroy ]
+  before_action :ensure_can_modify!, only: %i[ edit update destroy ]
 
   # GET /examinations or /examinations.json
   def index
-    @examinations = Examination.all
+    @examinations = if current_person.is_a?(Teacher)
+      Examination.joins(:course).where(courses: { person_id: current_person.id })
+    else
+      Examination.all
+    end
   end
 
   # GET /examinations/1 or /examinations/1.json
@@ -49,10 +55,10 @@ class ExaminationsController < ApplicationController
 
   # DELETE /examinations/1 or /examinations/1.json
   def destroy
-    @examination.destroy!
+    @examination.soft_delete
 
     respond_to do |format|
-      format.html { redirect_to examinations_path, status: :see_other, notice: "Examination was successfully destroyed." }
+      format.html { redirect_to examinations_path, notice: "Examination was successfully archived." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +66,17 @@ class ExaminationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_examination
-      @examination = Examination.find(params.expect(:id))
+      @examination = Examination.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def examination_params
-      params.expect(examination: [ :title, :expected_at, :course_id ])
+      params.require(:examination).permit(:title, :expected_at, :course_id)
+    end
+
+    def ensure_can_modify!
+      unless current_person.is_a?(Dean) || (current_person.is_a?(Teacher) && @examination.course.person_id == current_person.id)
+        redirect_to examinations_path, alert: "You are not authorized to modify this examination."
+      end
     end
 end
