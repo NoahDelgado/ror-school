@@ -10,7 +10,7 @@
         <% if @school_classes.any? %>
           <div class="tags">
             <% @school_classes.each do |school_class| %>
-              <span class="tag is-medium is-info"><%= school_class.name %></span>
+              <span class="tag is-medium is-info"><%= school_class&.name || "Unknown class" %></span>
             <% end %>
           </div>
         <% else %>
@@ -45,7 +45,7 @@
           <div class="box">
             <div class="level">
               <div class="level-left">
-                <h3 class="title is-4"><%= subject.name %></h3>
+                <h3 class="title is-4"><%= subject&.name || "Unknown subject" %></h3>
               </div>
               <div class="level-right">
                 <% if @average_by_subject[subject] %>
@@ -67,7 +67,7 @@
               <tbody>
                 <% grades.each do |grade| %>
                   <tr>
-                    <td><%= grade.examination.title %></td>
+                    <td><%= grade.examination&.title || "Unknown examination" %></td>
                     <td>
                       <span class="tag <%= grade.value >= 4 ? 'is-success' : 'is-danger' %>">
                         <%= grade.value %>

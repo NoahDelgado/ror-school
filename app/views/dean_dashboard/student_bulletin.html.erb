@@ -50,10 +50,10 @@
             <tbody>
               <% @grades.each do |grade| %>
                 <tr>
-                  <td><%= grade.examination.course.subject.name %></td>
-                  <td><%= grade.examination.title %></td>
+                  <td><%= grade.examination&.course&.subject&.name || "Unknown subject" %></td>
+                  <td><%= grade.examination&.title || "Unknown examination" %></td>
                   <td class="has-text-weight-bold"><%= grade.value %></td>
-                  <td><%= grade.examination.expected_at.strftime('%d-%m-%Y') if grade.examination.expected_at %></td>
+                  <td><%= grade.examination&.expected_at&.strftime('%d-%m-%Y') || "Not scheduled" %></td>
                 </tr>
               <% end %>
             </tbody>

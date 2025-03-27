@@ -1,0 +1,225 @@
+<% content_for :title, "Academic Period View" %>
+
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Academic Period Information</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <%= link_to dean_dashboard_index_path, class: "button is-light" do %>
+            <span class="icon">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+            <span>Back to Dashboard</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns mb-5">
+      <div class="column is-3">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </span>
+                <span>Select Period</span>
+              </span>
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="menu">
+              <ul class="menu-list">
+                <% @moments.each do |moment| %>
+                  <%= link_to course_history_dean_dashboard_index_path(moment_id: moment.id), 
+                              class: "is-rounded #{'is-active' if @selected_moment && moment.id == @selected_moment.id}" do %>
+                    <span class="icon-text">
+                      <span class="icon">
+                        <i class="fas fa-graduation-cap"></i>
+                      </span>
+                      <span><%= moment.display_name %></span>
+                    </span>
+                  <% end %>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="column is-9">
+        <% if @selected_moment %>
+          <div class="card mb-5">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon-text">
+                  <span class="icon">
+                    <i class="fas fa-info-circle"></i>
+                  </span>
+                  <span><%= @selected_moment.display_name %> Overview</span>
+                </span>
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="columns is-multiline">
+                <div class="column is-4">
+                  <div class="notification is-info is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-book fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Courses</p>
+                        <p class="title is-4"><%= @stats[:total_courses] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="notification is-success is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-user-tie fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Teachers</p>
+                        <p class="title is-4"><%= @stats[:teachers_count] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="notification is-warning is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-school fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Classes</p>
+                        <p class="title is-4"><%= @stats[:school_classes_count] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="notification is-danger is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-book-open fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Subjects</p>
+                        <p class="title is-4"><%= @stats[:subjects_count] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="notification is-link is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Active Courses</p>
+                        <p class="title is-4"><%= @stats[:active_courses] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="notification is-primary is-light">
+                    <div class="is-flex is-align-items-center">
+                      <span class="icon is-large mr-3">
+                        <i class="fas fa-archive fa-2x"></i>
+                      </span>
+                      <div>
+                        <p class="heading">Archived</p>
+                        <p class="title is-4"><%= @stats[:archived_courses] %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon-text">
+                  <span class="icon">
+                    <i class="fas fa-list"></i>
+                  </span>
+                  <span>Courses for <%= @selected_moment.display_name %></span>
+                </span>
+              </p>
+            </header>
+            <div class="card-content">
+              <% if @courses.any? %>
+                <div class="tabs">
+                  <ul>
+                    <li class="is-active"><a data-target="all-courses">All Courses</a></li>
+                    <li><a data-target="active-courses">Active Courses</a></li>
+                    <li><a data-target="archived-courses">Archived Courses</a></li>
+                  </ul>
+                </div>
+
+                <div id="all-courses" class="tab-content">
+                  <%= render 'courses_table', courses: @courses %>
+                </div>
+                
+                <div id="active-courses" class="tab-content is-hidden">
+                  <%= render 'courses_table', courses: @courses.where(deleted_at: nil) %>
+                </div>
+                
+                <div id="archived-courses" class="tab-content is-hidden">
+                  <%= render 'courses_table', courses: @courses.where.not(deleted_at: nil) %>
+                </div>
+              <% else %>
+                <div class="notification is-info is-light">
+                  <p>No courses found for this academic period.</p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <div class="notification is-warning is-light">
+            <p>Please select an academic period from the left menu.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching
+    const tabs = document.querySelectorAll('.tabs li');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('is-active'));
+        
+        // Add active class to clicked tab
+        this.classList.add('is-active');
+        
+        // Hide all tab contents
+        tabContents.forEach(content => content.classList.add('is-hidden'));
+        
+        // Show the selected tab content
+        const target = this.querySelector('a').getAttribute('data-target');
+        document.getElementById(target).classList.remove('is-hidden');
+      });
+    });
+  });
+</script> 
