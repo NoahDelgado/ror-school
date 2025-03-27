@@ -22,7 +22,7 @@ A comprehensive web application built with Ruby on Rails 8 for managing school o
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/ror-school.git
+   git clone https://github.com/NoahDelgado/ror-school
    cd ror-school
    ```
 
