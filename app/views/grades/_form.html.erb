@@ -31,7 +31,7 @@
       <%= form.collection_select :examination_id, 
           current_person.is_a?(Teacher) ? Examination.joins(:course).where(courses: { person_id: current_person.id }) : Examination.all,
           :id, 
-          ->(e) { "#{e.course.subject.name} - #{e.title}" },
+          ->(e) { "#{e.course&.subject&.name || 'Unknown subject'} - #{e.title}" },
           { prompt: "Select an examination" },
           { class: "select" } %>
     </div>

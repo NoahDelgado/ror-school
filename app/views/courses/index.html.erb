@@ -50,10 +50,10 @@
               <tbody>
                 <% @courses.each do |course| %>
                   <tr>
-                    <td><%= course.subject.name %></td>
-                    <td><%= course.school_class.name %></td>
-                    <td><%= course.person.full_name %></td>
-                    <td><%= course.moment.display_name %></td>
+                    <td><%= course.subject&.name || "Unknown subject" %></td>
+                    <td><%= course.school_class&.name || "Unknown class" %></td>
+                    <td><%= course.person&.full_name || "No teacher assigned" %></td>
+                    <td><%= course.moment&.display_name || "Unknown period" %></td>
                     <td>
                       <span class="icon-text">
                         <span class="icon">
@@ -83,6 +83,13 @@
                               <i class="fas fa-edit"></i>
                             </span>
                             <span>Edit</span>
+                          <% end %>
+                          
+                          <%= button_to course_path(course), method: :delete, class: "button is-danger", form: { style: "display: inline;" }, data: { turbo_confirm: "Are you sure you want to archive this course?" } do %>
+                            <span class="icon">
+                              <i class="fas fa-archive"></i>
+                            </span>
+                            <span>Archive</span>
                           <% end %>
                         <% end %>
                       </div>

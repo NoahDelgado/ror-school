@@ -50,7 +50,7 @@
             <%= form.collection_select :school_class_id,
                 SchoolClass.all,
                 :id,
-                ->(sc) { "#{sc.name} (#{sc.uid})" },
+                ->(sc) { "#{sc&.name || 'Unknown class'} (#{sc.uid})" },
                 { prompt: "Select a class" } %>
           </div>
         </div>
@@ -95,7 +95,7 @@
       <div class="field">
         <%= form.label :start_at, class: "label" %>
         <div class="control">
-          <%= form.time_field :start_at, value: course.start_at.is_a?(Time) ? course.start_at.strftime("%H:%M") : course.start_at, class: "input" %>
+          <%= form.time_field :start_at, value: course&.start_at&.is_a?(Time) ? course&.start_at&.strftime("%H:%M") : course&.start_at, class: "input" %>
         </div>
         <p class="help">Enter time in HH:MM format</p>
       </div>
@@ -105,7 +105,7 @@
       <div class="field">
         <%= form.label :end_at, class: "label" %>
         <div class="control">
-          <%= form.time_field :end_at, value: course.end_at.is_a?(Time) ? course.end_at.strftime("%H:%M") : course.end_at, class: "input" %>
+          <%= form.time_field :end_at, value: course&.end_at&.is_a?(Time) ? course&.end_at&.strftime("%H:%M") : course&.end_at, class: "input" %>
         </div>
         <p class="help">Enter time in HH:MM format</p>
       </div>
