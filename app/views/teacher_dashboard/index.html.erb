@@ -12,7 +12,7 @@
           <div class="tags">
             <% @courses.each do |course| %>
               <%= link_to course_path(course), class: "tag is-medium is-info is-light" do %>
-                <%= course.subject.name %> (<%= course.school_class.name %>)
+                <%= course.subject&.name || "Unknown subject" %> (<%= course.school_class&.name || "Unknown class" %>)
               <% end %>
             <% end %>
           </div>
@@ -66,8 +66,8 @@
           <% @upcoming_examinations.each do |exam| %>
             <tr>
               <td><%= exam.title %></td>
-              <td><%= exam.course.subject.name %></td>
-              <td><%= exam.course.school_class.name %></td>
+              <td><%= exam.course&.subject&.name || "Unknown subject" %></td>
+              <td><%= exam.course&.school_class&.name || "Unknown class" %></td>
               <td>
                 <span class="tag is-info">
                   <%= exam.expected_at&.strftime("%Y-%m-%d") %>
@@ -91,8 +91,8 @@
         <div class="column is-4">
           <div class="box">
             <h3 class="title is-4">
-              <%= stats[:course].subject.name %>
-              <span class="tag is-dark"><%= stats[:course].school_class.name %></span>
+              <%= stats[:course].subject&.name || "Unknown subject" %>
+              <span class="tag is-dark"><%= stats[:course].school_class&.name || "Unknown class" %></span>
             </h3>
             
             <div class="level">
