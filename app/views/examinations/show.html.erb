@@ -32,7 +32,7 @@
       <div class="column is-4">
         <div class="field">
           <label class="label">Course</label>
-          <p><%= @examination.course.subject.name %> - <%= @examination.course.school_class.name %></p>
+          <p><%= @examination.course&.subject&.name || "Unknown subject" %> - <%= @examination.course&.school_class&.name || "Unknown class" %></p>
         </div>
 
         <div class="field">

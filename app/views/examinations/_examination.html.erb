@@ -38,7 +38,7 @@
           </span>
           <span>
             <strong>Course:</strong><br>
-            <%= examination.course.subject.name %>
+            <%= examination.course&.subject&.name || "Unknown subject" %>
           </span>
         </span>
       </div>
@@ -50,7 +50,7 @@
           </span>
           <span>
             <strong>Class:</strong><br>
-            <%= examination.course.school_class.name %>
+            <%= examination.course&.school_class&.name || "Unknown class" %>
           </span>
         </span>
       </div>
@@ -59,7 +59,7 @@
 
   <footer class="card-footer">
     <%= link_to "View Details", examination, class: "card-footer-item" %>
-    <% if current_person.is_a?(Dean) || (current_person.is_a?(Teacher) && examination.course.person_id == current_person.id) %>
+    <% if current_person.is_a?(Dean) || (current_person.is_a?(Teacher) && examination.course&.person_id == current_person.id) %>
       <%= link_to "Edit", edit_examination_path(examination), class: "card-footer-item" %>
       <%= link_to "Delete", examination, class: "card-footer-item has-text-danger", 
           data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this examination?" } %>

@@ -31,7 +31,7 @@
       <%= form.collection_select :course_id,
           current_person.is_a?(Teacher) ? Course.where(person_id: current_person.id) : Course.all,
           :id,
-          ->(c) { "#{c.subject.name} - #{c.school_class.name} (#{c.week_day})" },
+          ->(c) { "#{c.subject&.name || 'Unknown subject'} - #{c.school_class&.name || 'Unknown class'} (#{c.week_day})" },
           { prompt: "Select a course" },
           { class: "select" } %>
     </div>
