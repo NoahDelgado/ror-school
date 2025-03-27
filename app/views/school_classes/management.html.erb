@@ -166,10 +166,10 @@
                       data-room="<%= school_class.room_id %>"
                     >
                       <td><strong><%= school_class.name %></strong> <small class="has-text-grey">(<%= school_class.uid %>)</small></td>
-                      <td><%= school_class.section.name %></td>
-                      <td><%= school_class.person.full_name %></td>
-                      <td><span class="tag is-info"><%= school_class.room.name %></span></td>
-                      <td><span class="tag is-primary"><%= school_class.moment.display_name %></span></td>
+                      <td><%= school_class.section&.name || "No section assigned" %></td>
+                      <td><%= school_class.person&.full_name || "No teacher assigned" %></td>
+                      <td><span class="tag is-info"><%= school_class.room&.name || "No room assigned" %></span></td>
+                      <td><span class="tag is-primary"><%= school_class.moment&.display_name || "No period assigned" %></span></td>
                       <td>
                         <div class="is-flex is-align-items-center">
                           <span class="icon"><i class="fas fa-users"></i></span>

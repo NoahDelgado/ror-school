@@ -36,12 +36,12 @@
 
             <div class="field">
               <label class="label">Room</label>
-              <p><%= @school_class.room.name %></p>
+              <p><%= @school_class.room&.name || "No room assigned" %></p>
             </div>
 
             <div class="field">
               <label class="label">Section</label>
-              <p><%= @school_class.section.name %></p>
+              <p><%= @school_class.section&.name || "No section assigned" %></p>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
                 <tbody>
                   <% @courses.each do |course| %>
                     <tr>
-                      <td><%= course.subject.name %></td>
+                      <td><%= course.subject&.name || "Unknown subject" %></td>
                       <td><%= format_week_day(course.week_day) %></td>
                       <td><%= course.start_at&.strftime("%H:%M") %></td>
                       <td><%= course.end_at&.strftime("%H:%M") %></td>
@@ -123,8 +123,8 @@
                   <tbody>
                     <% @school_class.courses.each do |course| %>
                       <tr>
-                        <td><%= course.subject.name %></td>
-                        <td><%= course.person.full_name %></td>
+                        <td><%= course.subject&.name || "Unknown subject" %></td>
+                        <td><%= course.person&.full_name || "No teacher assigned" %></td>
                         <td><%= format_week_day(course.week_day) %></td>
                         <td><%= course.start_at&.strftime("%H:%M") %> - <%= course.end_at&.strftime("%H:%M") %></td>
                         <% if current_person.is_a?(Dean) %>

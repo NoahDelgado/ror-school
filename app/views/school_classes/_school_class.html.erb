@@ -1,7 +1,7 @@
 <div id="<%= dom_id school_class %>" class="card mb-4">
   <header class="card-header">
     <p class="card-header-title">
-      <%= school_class.name %> (<%= school_class.uid %>)
+      <%= school_class&.name || "Unknown class" %> (<%= school_class.uid %>)
     </p>
     <% if current_person && current_person.id == school_class.person_id %>
       <div class="card-header-icon">
@@ -35,11 +35,7 @@
         <div class="column is-6">
           <p>
             <strong><i class="fas fa-clock"></i> Time Period:</strong><br>
-            <% if school_class.moment %>
-              <%= school_class.moment.display_name %>
-            <% else %>
-              Not assigned
-            <% end %>
+            <%= school_class.moment&.display_name || "Not assigned" %>
           </p>
         </div>
         <div class="column is-6">

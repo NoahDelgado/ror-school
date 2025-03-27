@@ -254,7 +254,7 @@
           <div class="tags">
             <% if current_person.is_a?(Student) %>
               <% current_person.school_classes.each do |school_class| %>
-                <span class="tag is-info"><%= school_class.name %></span>
+                <span class="tag is-info"><%= school_class&.name || "Unknown class" %></span>
               <% end %>
             <% else %>
               <span class="tag is-info">Week <%= @date.strftime("%U").to_i %></span>
@@ -276,7 +276,7 @@
         <% @subject_colors.each do |subject_id, color| %>
           <% subject = Subject.find(subject_id) %>
           <span class="tag" style="background-color: <%= color %>; color: white; margin-right: 5px;">
-            <%= subject.name %>
+            <%= subject&.name || "Unknown subject" %>
           </span>
         <% end %>
       </div>
@@ -302,44 +302,44 @@
                 <td class="day-cell">
                   <% 
                     courses_at_hour = @schedule[day].select do |course| 
-                      start_hour = course.start_at.hour
-                      end_hour = course.end_at.hour
+                      start_hour = course.start_at&.hour
+                      end_hour = course.end_at&.hour
                       
                       # Check if this hour falls within the course's time range
-                      (start_hour <= hour && end_hour > hour) || 
-                      (start_hour == hour && end_hour == hour)
+                      (start_hour && end_hour && start_hour <= hour && end_hour > hour) || 
+                      (start_hour && end_hour && start_hour == hour && end_hour == hour)
                     end
                   %>
                   <% courses_at_hour.each do |course| %>
                     <% 
                       # Get the course color from subject
-                      course_color = @subject_colors[course.subject.id]
+                      course_color = @subject_colors[course.subject&.id]
                     %>
                       <div class="course-block" 
                            style="background-color: <%= course_color %>;"
-                           data-subject="<%= course.subject.name %>">
+                           data-subject="<%= course.subject&.name || "Unknown subject" %>">
                         <div class="course-header">
                           <div class="course-time">
-                            <%= course.start_at.strftime("%H:%M") %> - <%= course.end_at.strftime("%H:%M") %>
+                            <%= course.start_at&.strftime("%H:%M") %> - <%= course.end_at&.strftime("%H:%M") %>
                           </div>
                           <% if current_person.is_a?(Student) %>
                             <div class="course-teacher">
-                              <%= course.person.full_name.split.first %>
+                              <%= course.person&.full_name&.split&.first || "TBA" %>
                             </div>
                           <% end %>
                         </div>
                         <div class="course-content">
                           <div class="course-left">
                             <div class="course-name">
-                              <%= course.subject.name %>
+                              <%= course.subject&.name || "Unknown subject" %>
                             </div>
                             <div class="course-location">
-                              <%= course.school_class.name %>
+                              <%= course.school_class&.name || "Unknown class" %>
                             </div>
                           </div>
-                          <% if course.school_class.room %>
+                          <% if course.school_class&.room %>
                             <div class="course-right">
-                              <%= course.school_class.room.name %>
+                              <%= course.school_class&.room&.name || "Unknown room" %>
                             </div>
                           <% end %>
                         </div>

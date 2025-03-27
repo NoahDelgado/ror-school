@@ -1,12 +1,47 @@
-<% content_for :title, "Editing section" %>
+<% content_for :title, "Edit Section" %>
 
-<h1>Editing section</h1>
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Edit Section</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons">
+            <%= link_to section_path(@section), class: "button is-info" do %>
+              <span class="icon">
+                <i class="fas fa-eye"></i>
+              </span>
+              <span>View Section</span>
+            <% end %>
+            <%= link_to sections_path, class: "button is-light" do %>
+              <span class="icon">
+                <i class="fas fa-arrow-left"></i>
+              </span>
+              <span>Back to Sections</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<%= render "form", section: @section %>
-
-<br>
-
-<div>
-  <%= link_to "Show this section", @section %> |
-  <%= link_to "Back to sections", sections_path %>
-</div>
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-edit"></i>
+            </span>
+            <span>Edit <%= @section.name %></span>
+          </span>
+        </p>
+      </header>
+      <div class="card-content">
+        <%= render "form", section: @section %>
+      </div>
+    </div>
+  </div>
+</section>
