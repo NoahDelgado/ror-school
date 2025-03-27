@@ -37,13 +37,14 @@ A comprehensive web application built with Ruby on Rails 8 for managing school o
    rails db:migrate
    rails db:seed
    ```
+4. Check the terminal outpout for the users credential
 
-4. Start the Rails server
+5. Start the Rails server
    ```bash
    rails server
    ```
 
-5. Visit http://localhost:xxxx in your browser
+6. Visit http://localhost:3000 in your browser
 
 
 ## Database Structure
