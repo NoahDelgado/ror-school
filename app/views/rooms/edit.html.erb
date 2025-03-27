@@ -1,12 +1,47 @@
-<% content_for :title, "Editing room" %>
+<% content_for :title, "Edit Room" %>
 
-<h1>Editing room</h1>
+<section class="section">
+  <div class="container">
+    <div class="level mb-5">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">Edit Room</h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons">
+            <%= link_to room_path(@room), class: "button is-info" do %>
+              <span class="icon">
+                <i class="fas fa-eye"></i>
+              </span>
+              <span>View Room</span>
+            <% end %>
+            <%= link_to rooms_path, class: "button is-light" do %>
+              <span class="icon">
+                <i class="fas fa-arrow-left"></i>
+              </span>
+              <span>Back to Rooms</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<%= render "form", room: @room %>
-
-<br>
-
-<div>
-  <%= link_to "Show this room", @room %> |
-  <%= link_to "Back to rooms", rooms_path %>
-</div>
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-edit"></i>
+            </span>
+            <span>Edit <%= @room.name %></span>
+          </span>
+        </p>
+      </header>
+      <div class="card-content">
+        <%= render "form", room: @room %>
+      </div>
+    </div>
+  </div>
+</section>
