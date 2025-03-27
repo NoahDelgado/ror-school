@@ -1,26 +1,65 @@
-# README
+# ROR School Management System
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A comprehensive web application built with Ruby on Rails 8 for managing school operations including students, teachers, classes, courses, examinations, and grades.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+* **User Management**: Support for different user roles (Students, Teachers, Deans, Administrators)
+* **Class Management**: Create and manage school classes with assigned teachers and rooms
+* **Course Scheduling**: Schedule courses with specific subjects, teachers, and time slots
+* **Examination Management**: Create and track examinations for courses
+* **Grading System**: Record and manage student grades for examinations
+* **Dashboards**: Specialized dashboards for students, teachers, and deans
 
-* System dependencies
+## System Requirements
 
-* Configuration
+* Ruby 3.x
+* Rails 8.0.1
+* SQLite 2.1+ (development/testing)
+* Node.js and Yarn for JavaScript dependencies
 
-* Database creation
+## Installation
 
-* Database initialization
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/ror-school.git
+   cd ror-school
+   ```
 
-* How to run the test suite
+2. Install dependencies
+   ```bash
+   bundle install
+   ```
 
-* Services (job queues, cache servers, search engines, etc.)
+3. Set up the database
+   ```bash
+   rails db:create
+   rails db:migrate
+   rails db:seed
+   ```
 
-* Deployment instructions
+4. Start the Rails server
+   ```bash
+   rails server
+   ```
 
-* ...
+5. Visit http://localhost:xxxx in your browser
 
-* 
+
+## Database Structure
+
+The application utilizes the following main models:
+
+* **Person**: Base class for different user types (Student, Teacher, Dean, Administrator)
+* **SchoolClass**: Represents a class with students and assigned teacher
+* **Course**: Represents a subject taught by a teacher in a specific time slot
+* **Examination**: Tests or assignments for courses
+* **Grade**: Student grades for examinations
+* **Moment**: Time periods (semesters, terms, etc.)
+* **Subject**: Academic subjects taught in courses
+* **Room**: Physical classrooms where classes take place
+* **Section**: Departments or sections within the school
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 
