@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       get :manage_courses
       get :manage_bulletins
       get :student_bulletin
+      get :course_history
     end
   end
 
