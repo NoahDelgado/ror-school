@@ -17,6 +17,36 @@ class DeanDashboardController < ApplicationController
     @school_classes = SchoolClass.all
   end
 
+  def course_history
+    # Get all moments ordered by year and period
+    @moments = Moment.all.order(year: :desc, period_number: :desc)
+
+    # Set selected moment from params or default to most recent
+    @selected_moment = if params[:moment_id]
+      Moment.find(params[:moment_id])
+    else
+      @moments.first
+    end
+
+    if @selected_moment
+      # Get all courses for the selected moment including soft-deleted ones
+      @courses = Course.unscoped
+                     .where(moment_id: @selected_moment.id)
+                     .includes(:subject, :school_class, :person)
+                     .order("subjects.name")
+
+      # Calculate statistics for the selected moment
+      @stats = {
+        total_courses: @courses.count,
+        active_courses: @courses.where(deleted_at: nil).count,
+        archived_courses: @courses.where.not(deleted_at: nil).count,
+        teachers_count: @courses.map(&:person_id).uniq.count,
+        subjects_count: @courses.map(&:subject_id).uniq.count,
+        school_classes_count: @courses.map(&:school_class_id).uniq.count
+      }
+    end
+  end
+
   def manage_bulletins
     @moments = Moment.all
     @school_classes = SchoolClass.all

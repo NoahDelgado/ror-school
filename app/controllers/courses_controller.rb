@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
   # GET /courses or /courses.json
   def index
     @courses = if current_person.is_a?(Teacher)
-      current_person.courses
+      Course.where(person_id: current_person.id)
     else
       Course.all
     end

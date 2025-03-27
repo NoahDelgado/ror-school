@@ -47,7 +47,7 @@ class GradesController < ApplicationController
   # POST /grades or /grades.json
   def create
     @grade = Grade.new(grade_params)
-    authorize_teacher_for_grade
+    return unless authorize_teacher_for_grade
 
     respond_to do |format|
       if @grade.save
@@ -62,7 +62,7 @@ class GradesController < ApplicationController
 
   # PATCH/PUT /grades/1 or /grades/1.json
   def update
-    authorize_teacher_for_grade
+    return unless authorize_teacher_for_grade
 
     respond_to do |format|
       if @grade.update(grade_params)
@@ -77,7 +77,7 @@ class GradesController < ApplicationController
 
   # DELETE /grades/1 or /grades/1.json
   def destroy
-    authorize_teacher_for_grade
+    return unless authorize_teacher_for_grade
     @grade.soft_delete
 
     respond_to do |format|
@@ -126,7 +126,9 @@ class GradesController < ApplicationController
                        .where(id: @grade.examination_id)
                        .exists?
         redirect_to root_path, alert: "You are not authorized to manage this grade."
+        return false
       end
+      true
     end
 
     # Use callbacks to share common setup or constraints between actions.

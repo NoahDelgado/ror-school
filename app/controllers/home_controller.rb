@@ -8,7 +8,10 @@ class HomeController < ApplicationController
     # Redirect teachers to their dashboard
     elsif current_person.is_a?(Teacher)
       redirect_to teacher_dashboard_path
+    # Redirect deans to their dashboard
+    elsif current_person.is_a?(Dean)
+      redirect_to dean_dashboard_index_path
     end
-    # Keep the default page for other roles (Dean)
+    # Keep the default page for other roles
   end
 end
